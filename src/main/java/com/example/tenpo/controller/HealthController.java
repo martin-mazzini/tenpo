@@ -9,7 +9,7 @@ public class HealthController {
 
 
     @GetMapping("/health")
-    ResponseEntity<String> heatlth() {
+    ResponseEntity<String> health() {
         return ResponseEntity.ok("Healthy instance");
     }
 
