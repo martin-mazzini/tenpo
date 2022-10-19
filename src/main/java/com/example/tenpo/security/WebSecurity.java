@@ -14,18 +14,16 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 
 @Configuration
-/*@EnableWebSecurity*/
+@EnableWebSecurity
 public class WebSecurity  {
 
 
-/*
+
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests((authorize) -> authorize
-						.anyRequest().authenticated());
-
+		http.authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll());
 		return http.build();
-	}*/
+	}
 
 
 }
