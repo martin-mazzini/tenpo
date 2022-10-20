@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -36,9 +38,16 @@ public class RequestLogger extends OncePerRequestFilter {
         int length = Math.min(buf.length, this.maxPayloadLength);
         try {
             return new String(buf, 0, length, charsetName);
-        } catch (UnsupportedEncodingException ex) {
+            // return new String(buf, 0, length, charsetName);
+        } catch (Exception ex) {
             return "Unsupported Encoding";
         }
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return !path.startsWith("/api/v1/");
     }
 
     @Override
@@ -63,6 +72,7 @@ public class RequestLogger extends OncePerRequestFilter {
         if (queryString != null) {
             URI = URI + "?" + queryString;
         }
+
         String requestBody = this.getContentAsString(wrappedRequest.getContentAsByteArray(), this.maxPayloadLength, request.getCharacterEncoding());
 
         String principal = Optional.ofNullable(request.getUserPrincipal()).map(p ->p.getName()).orElse("");

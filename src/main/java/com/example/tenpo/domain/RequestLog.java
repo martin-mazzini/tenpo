@@ -25,8 +25,10 @@ public class RequestLog {
 
     private String queryParams;
 
+    @Column(length=1000)
     private String requestBody;
 
+    @Column(length=1000)
     private String responseBody;
 
     private String principal;
