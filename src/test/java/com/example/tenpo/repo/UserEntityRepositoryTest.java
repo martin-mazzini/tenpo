@@ -12,7 +12,7 @@ import java.util.Optional;
 class UserEntityRepositoryTest extends DatabaseTest {
 
     @Autowired
-    private UserEntityRepository userEntityRepository;
+    private UserRepository userEntityRepository;
 
     @Test
     public void test1(){

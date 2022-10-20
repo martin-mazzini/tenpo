@@ -13,5 +13,10 @@ public class PingController {
         return ResponseEntity.ok("Healthy instance");
     }
 
+    @GetMapping("/other")
+    ResponseEntity<String> other() {
+        return ResponseEntity.ok("Other");
+    }
+
 
 }
