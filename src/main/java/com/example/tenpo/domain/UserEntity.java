@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-@Table(name="xyz")
+@Table(name="XYZ")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,7 +18,7 @@ public class UserEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	protected Long id;
 
 
 }
