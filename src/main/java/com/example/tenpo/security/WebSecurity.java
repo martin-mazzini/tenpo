@@ -39,10 +39,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter  {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
 				.authorizeRequests()
-				.antMatchers( "/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**","/swagger-resources/configuration/ui","/swagger-ui.html","/h2-console/**")
-				.permitAll();
-				/*.antMatchers("/api/users/login").permitAll()
-				.antMatchers(HttpMethod.POST, "/api/users").permitAll();*/
+				.antMatchers("/ping","/v2/api-docs","/swagger-ui/**","/swagger-resources/**","/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**","/swagger-resources/configuration/ui","/swagger-ui.html")
+				.permitAll()
+				.anyRequest().authenticated();
 		http.headers().frameOptions().disable();
 
 	}
