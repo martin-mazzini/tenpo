@@ -1,7 +1,7 @@
 package com.example.tenpo.service;
 
 import com.example.tenpo.domain.RequestLog;
-import com.example.tenpo.repo.RequestLogRepository;
+import com.example.tenpo.repo.db.RequestLogRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

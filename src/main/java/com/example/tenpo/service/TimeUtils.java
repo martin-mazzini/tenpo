@@ -14,10 +14,6 @@ public class TimeUtils {
         return date.getMinute() <= 29 ? 0 : 1;
     }
 
-    public String getKey(LocalDateTime date) {
-        return date.getMonthValue() + date.getDayOfMonth()
-                + date.getHour() + String.valueOf(getHalfHour(date));
-    }
 
     //ignores time zone information
     public LocalDateTime parseLocalDateTime(String s){

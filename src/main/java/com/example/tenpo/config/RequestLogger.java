@@ -1,7 +1,7 @@
 package com.example.tenpo.config;
 
 import com.example.tenpo.domain.RequestLog;
-import com.example.tenpo.repo.RequestLogRepository;
+import com.example.tenpo.repo.db.RequestLogRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -13,12 +13,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Component
 public class RequestLogger extends OncePerRequestFilter {

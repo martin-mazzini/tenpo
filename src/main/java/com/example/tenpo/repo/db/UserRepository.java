@@ -1,4 +1,4 @@
-package com.example.tenpo.repo;
+package com.example.tenpo.repo.db;
 
 import com.example.tenpo.domain.UserEntity;
 import org.springframework.data.repository.CrudRepository;
