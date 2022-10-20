@@ -1,7 +1,7 @@
 package com.example.tenpo.controller;
 
 
-import com.example.tenpo.controller.dto.UserDTO;
+import com.example.tenpo.service.dto.UserDTO;
 import com.example.tenpo.controller.request.CreateUserRequest;
 import com.example.tenpo.controller.request.LoginRequest;
 import com.example.tenpo.controller.response.CreateUserResponse;

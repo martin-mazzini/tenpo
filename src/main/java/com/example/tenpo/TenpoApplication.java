@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 @SpringBootApplication
 public class TenpoApplication {
 
+
+
     public static void main(String[] args) {
         SpringApplication.run(TenpoApplication.class, args);
     }

@@ -2,7 +2,7 @@ package com.example.tenpo.service;
 
 
 
-import com.example.tenpo.controller.dto.UserDTO;
+import com.example.tenpo.service.dto.UserDTO;
 import com.example.tenpo.domain.UserEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

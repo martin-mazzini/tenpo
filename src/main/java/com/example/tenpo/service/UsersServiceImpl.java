@@ -1,10 +1,11 @@
 package com.example.tenpo.service;
 
 
-import com.example.tenpo.controller.dto.UserDTO;
+
 import com.example.tenpo.domain.UserEntity;
 import com.example.tenpo.exceptions.exceptions.NotUniqueException;
 import com.example.tenpo.repo.UserRepository;
+import com.example.tenpo.service.dto.UserDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
