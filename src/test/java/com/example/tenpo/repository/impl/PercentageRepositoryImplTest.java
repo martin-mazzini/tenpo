@@ -22,6 +22,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 @SpringBootTest
 class PercentageRepositoryImplTest {
 
+    public static final Integer MAX_ATTEMPTS = 3;
+
     @Autowired
     private Cache<String, Integer> percentageCache;
 
@@ -68,7 +70,7 @@ class PercentageRepositoryImplTest {
     }
 
     @Test
-    void whenHalfHourElapsed_callExternalService()  {
+    void whenHalfHourElapsed_callExternalServiceAgain()  {
 
         mockTime("2000-03-01T00:00:00Z");
         Mockito.when(restTemplate.getForObject(anyString(),any())).thenReturn(12);
@@ -97,8 +99,37 @@ class PercentageRepositoryImplTest {
         Optional<Integer> percentage = percentageRepository.getPercentage();
         Assertions.assertThat(percentage.isPresent());
         Assertions.assertThat(percentage.get()).isEqualTo(12);
-
+        Mockito.verify(restTemplate, Mockito.times(1 + MAX_ATTEMPTS)).getForObject(anyString(),any());
     }
+
+
+    @Test
+    void whenServiceBreaksAndCacheEmpty_returnEmpty()  {
+
+        mockTime("2000-03-01T00:30:01Z");
+        Mockito.when(restTemplate.getForObject(anyString(),any())).thenThrow(RestClientException.class);
+        Optional<Integer> percentage = percentageRepository.getPercentage();
+        Assertions.assertThat(percentage.isEmpty());
+    }
+
+    @Test
+    void whenServiceSucceedsThirdTime_returnFromItAndNotFromCache()  {
+
+        mockTime("2000-03-01T00:00:00Z");
+        Mockito.when(restTemplate.getForObject(anyString(),any())).thenReturn(12);
+        percentageRepository.getPercentage();
+
+        //half hour elapsed
+        mockTime("2000-03-01T00:30:01Z");
+        Mockito.when(restTemplate.getForObject(anyString(),any())).thenThrow(RestClientException.class)
+                .thenThrow(RestClientException.class).thenReturn(20);
+        Optional<Integer> percentage = percentageRepository.getPercentage();
+        Assertions.assertThat(percentage.isPresent());
+        Assertions.assertThat(percentage.get()).isEqualTo(20);
+    }
+
+
+
 
 
     private void mockTime(String dateTime) {
