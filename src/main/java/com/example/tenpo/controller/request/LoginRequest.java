@@ -15,13 +15,13 @@ public class LoginRequest {
 
 	@NotNull(message="El email no puede ser vacío")
 	@Email
-	@ApiModelProperty(value="Email con formato válido", example = "A@A.com", required = true)
+	@ApiModelProperty(value="Email con formato válido", example = "martinmazzinigeo@gmail.com", required = true)
 	private String email;
 
 
 	@NotNull(message="Password no puede ser vacía")
 	@Size(min=8, max=16, message="La password debe tener entre 8 y 17 caracteres")
-	@ApiModelProperty(value="Password entre 8 y 17 caracteres", example = "argentina123", required = true)
+	@ApiModelProperty(value="Password entre 8 y 17 caracteres", example = "m123456789", required = true)
 	private String password;
 
 

@@ -58,7 +58,7 @@ public class PercentageRepositoryImpl implements PercentageRepository {
     @Retry(name = "percentageRetry")
     public Integer fetchPercentage(String cacheKey, LocalDateTime now) {
         Integer percentage = restTemplate.getForObject(serviceUrl, Integer.class);
-        synchronized {
+        synchronized (this) {
             CacheEntry cacheEntry = new CacheEntry(percentage, cacheKey, now);
         }
         return percentage;
