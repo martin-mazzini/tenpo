@@ -16,7 +16,7 @@ public class PercentageServiceMock extends RestTemplate {
     private Random random = new Random();
 
     @Nullable
-    public <T> T getForObject(String url, Class<T> responseType) throws RestClientException {
+    public <T> T getForObject(String url, Class<T> responseType, Object... uriVariables) throws RestClientException {
         try {
             return responseType.cast(10 + random.nextInt(2));
         } catch(ClassCastException e) {

@@ -16,23 +16,24 @@ import java.util.Optional;
 public class PercentageRepositoryImpl implements PercentageRepository {
 
 
+    private volatile CacheEntry lastCacheEntry;
+    private Cache<String, Integer> percentageCache;
+
+
     public static final String SEPARATOR = "-";
     @Value("${service2.url:http://localhost:6060/service2}")
     String serviceUrl;
     private TimeUtils timeUtils;
-    private CacheEntry lastCacheEntry;
-    private Cache<String, Integer> percentageCache;
     private RestTemplate restTemplate;
+    private Object lock = new Object();
 
-    protected static class CacheEntry{
+    protected static class CacheEntry {
         private Integer percentage;
         private String key;
-        private LocalDateTime insertionTime;
 
-        public CacheEntry(Integer percentage, String key, LocalDateTime insertionTime) {
+        public CacheEntry(Integer percentage, String key) {
             this.percentage = percentage;
             this.key = key;
-            this.insertionTime = insertionTime;
         }
     }
 
@@ -47,8 +48,8 @@ public class PercentageRepositoryImpl implements PercentageRepository {
         LocalDateTime now = timeUtils.getNow();
         String cacheKey = getKey(now);
         Integer percentage = percentageCache.getIfPresent(cacheKey);
-        if (percentage == null){
-            percentage = fetchPercentage(cacheKey, now);
+        if (percentage == null) {
+            percentage = fetchPercentage(cacheKey);
         }
         return Optional.ofNullable(percentage);
     }
@@ -56,20 +57,18 @@ public class PercentageRepositoryImpl implements PercentageRepository {
 
     @CircuitBreaker(name = "percentageCircuitBreaker", fallbackMethod = "fallback")
     @Retry(name = "percentageRetry")
-    public Integer fetchPercentage(String cacheKey, LocalDateTime now) {
-        Integer percentage = restTemplate.getForObject(serviceUrl, Integer.class);
-        synchronized (this) {
-            CacheEntry cacheEntry = new CacheEntry(percentage, cacheKey, now);
-        }
-        return percentage;
-
+    public Integer fetchPercentage(String cacheKey) {
+        Integer newPercentage = restTemplate.getForObject(serviceUrl, Integer.class);
+        //update cache and last key
+        CacheEntry cacheEntry = new CacheEntry(newPercentage, cacheKey);
+        this.lastCacheEntry = cacheEntry;
+        percentageCache.put(cacheKey, newPercentage);
+        return newPercentage;
     }
 
-    public synchronized Integer fetchPercentageFallback(Exception e) {
-        if (lastCacheEntry == null) {
-            return lastCacheEntry != null ? lastCacheEntry.percentage : null;
-        }
-        return null;
+    //fallback method after retries
+    public Integer fetchPercentageFallback(Exception e) {
+        return lastCacheEntry != null ? lastCacheEntry.percentage : null;
     }
 
     public String getKey(LocalDateTime date) {
