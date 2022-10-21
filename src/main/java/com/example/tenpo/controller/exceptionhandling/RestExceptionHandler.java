@@ -1,8 +1,8 @@
-package com.example.tenpo.exceptions;
+package com.example.tenpo.controller.exceptionhandling;
 
-import com.example.tenpo.exceptions.exceptions.DataNotFoundException;
-import com.example.tenpo.exceptions.exceptions.NotUniqueException;
-import com.example.tenpo.exceptions.exceptions.ServiceUnavailableException;
+import com.example.tenpo.exceptions.DataNotFoundException;
+import com.example.tenpo.exceptions.NotUniqueException;
+import com.example.tenpo.exceptions.ServiceUnavailableException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

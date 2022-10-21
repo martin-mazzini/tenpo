@@ -33,8 +33,6 @@ public class RequestLog {
 
     private String principal;
 
-    private String authType;
-
     private LocalDateTime created;
 
     private Long elapsedTime;
@@ -51,7 +49,6 @@ public class RequestLog {
                 ", requestBody='" + requestBody + '\'' +
                 ", responseBody='" + responseBody + '\'' +
                 ", principal='" + principal + '\'' +
-                ", authType='" + authType + '\'' +
                 ", created=" + created +
                 ", elapsedTime=" + elapsedTime +
                 ", responseStatus=" + responseStatus +

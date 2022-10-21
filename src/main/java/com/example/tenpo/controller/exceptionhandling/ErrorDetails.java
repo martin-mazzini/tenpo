@@ -1,4 +1,4 @@
-package com.example.tenpo.exceptions;
+package com.example.tenpo.controller.exceptionhandling;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

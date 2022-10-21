@@ -1,6 +1,6 @@
-package com.example.tenpo.config;
+package com.example.tenpo.filters;
 
-import com.example.tenpo.repo.db.RequestLogRepository;
+import com.example.tenpo.repo.RequestLogRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -17,15 +17,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Component
-public class RequestLogger extends OncePerRequestFilter {
+public class AsyncRequestProcessorFilter extends OncePerRequestFilter {
 
+    private final RequestLogRepository requestLogRepository;
+    private final ExecutorService threadPool = Executors.newFixedThreadPool(10);
+    private final Logger logger = LoggerFactory.getLogger(AsyncRequestProcessorFilter.class);
 
-
-    private RequestLogRepository requestLogRepository;
-    private ExecutorService threadPool = Executors.newFixedThreadPool(10);
-    Logger logger = LoggerFactory.getLogger(RequestLogger.class);
-
-    public RequestLogger(RequestLogRepository requestLogRepository) {
+    public AsyncRequestProcessorFilter(RequestLogRepository requestLogRepository) {
         this.requestLogRepository = requestLogRepository;
     }
 
@@ -45,13 +43,11 @@ public class RequestLogger extends OncePerRequestFilter {
         filterChain.doFilter(wrappedRequest, wrappedResponse);
         wrappedResponse.copyBodyToResponse();
         long endTime = System.currentTimeMillis();
-        RequestToDbRunnable saveToDB = new RequestToDbRunnable(startTime, endTime, wrappedRequest, wrappedResponse, requestLogRepository);
-        logger.debug("Finished processing request");
 
+        RequestToDatabaseRunnable saveToDB = new RequestToDatabaseRunnable(startTime, endTime, wrappedRequest, wrappedResponse, requestLogRepository);
+        logger.debug("Finished processing request");
         threadPool.submit(saveToDB);
         logger.debug("Task submited");
-
-
     }
 
 

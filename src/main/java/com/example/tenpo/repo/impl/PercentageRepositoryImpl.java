@@ -1,5 +1,6 @@
-package com.example.tenpo.repo.rest;
+package com.example.tenpo.repo.impl;
 
+import com.example.tenpo.repo.PercentageRepository;
 import com.example.tenpo.service.TimeUtils;
 import com.github.benmanes.caffeine.cache.Cache;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -17,19 +18,16 @@ public class PercentageRepositoryImpl implements PercentageRepository {
 
     private volatile CacheEntry lastCacheEntry;
     private Cache<String, Integer> percentageCache;
-
-
     public static final String SEPARATOR = "-";
-    @Value("${service2.url:http://localhost:6060/service2}")
-    String serviceUrl;
+    @Value("${percentage.service.url}")
+    private  String serviceUrl;
     private TimeUtils timeUtils;
     private RestTemplate restTemplate;
-    private Object lock = new Object();
+
 
     protected static class CacheEntry {
         private Integer percentage;
         private String key;
-
         public CacheEntry(Integer percentage, String key) {
             this.percentage = percentage;
             this.key = key;
@@ -54,22 +52,6 @@ public class PercentageRepositoryImpl implements PercentageRepository {
     }
 
 
-    @CircuitBreaker(name = "percentageCircuitBreaker", fallbackMethod = "fallback")
-    @Retry(name = "percentageRetry")
-    public Integer fetchPercentage(String cacheKey) {
-        Integer newPercentage = restTemplate.getForObject(serviceUrl, Integer.class);
-        //update cache and last key
-        CacheEntry cacheEntry = new CacheEntry(newPercentage, cacheKey);
-        this.lastCacheEntry = cacheEntry;
-        percentageCache.put(cacheKey, newPercentage);
-        return newPercentage;
-    }
-
-    //fallback method after retries
-    public Integer fetchPercentageFallback(Exception e) {
-        return lastCacheEntry != null ? lastCacheEntry.percentage : null;
-    }
-
     public String getKey(LocalDateTime date) {
         return new StringBuffer()
                 .append(date.getMonthValue())
@@ -80,5 +62,20 @@ public class PercentageRepositoryImpl implements PercentageRepository {
                 .append(SEPARATOR)
                 .append(timeUtils.getHalfHour(date))
                 .toString();
+    }
+
+    @CircuitBreaker(name = "percentageCircuitBreaker", fallbackMethod = "fallback")
+    @Retry(name = "percentageRetry")
+    public Integer fetchPercentage(String cacheKey) {
+        Integer newPercentage = restTemplate.getForObject(serviceUrl, Integer.class);
+        CacheEntry cacheEntry = new CacheEntry(newPercentage, cacheKey);
+        this.lastCacheEntry = cacheEntry;
+        percentageCache.put(cacheKey, newPercentage);
+        return newPercentage;
+    }
+
+
+    public Integer fetchPercentageFallback(Exception e) {
+        return lastCacheEntry != null ? lastCacheEntry.percentage : null;
     }
 }

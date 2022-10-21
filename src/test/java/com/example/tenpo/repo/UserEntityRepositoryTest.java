@@ -1,7 +1,6 @@
 package com.example.tenpo.repo;
 
 import com.example.tenpo.domain.UserEntity;
-import com.example.tenpo.repo.db.UserRepository;
 import com.example.tenpo.testutils.DatabaseTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

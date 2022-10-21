@@ -15,36 +15,17 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-public class Config {
+public class ModelMapperConfig {
 
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public ModelMapper modelMapper() {
-        ModelMapper modelMapper = new ModelMapper();
+    public org.modelmapper.ModelMapper modelMapper() {
+        org.modelmapper.ModelMapper modelMapper = new org.modelmapper.ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         return modelMapper;
     }
 
-   /* @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        //config adicional podría ir acá
-        return builder.build();
-    }*/
 
 
-    @Bean
-    public Cache<String, Integer> percentagesCache(){
-        Cache<String, Integer> cache = Caffeine.newBuilder()
-                .expireAfterWrite(1, TimeUnit.DAYS)
-                .maximumSize(100)
-                .build();
-        return cache;
-
-    }
 
 }

@@ -1,4 +1,4 @@
-package com.example.tenpo.exceptions.exceptions;
+package com.example.tenpo.exceptions;
 
 public class ServiceUnavailableException extends RuntimeException {
 

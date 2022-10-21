@@ -1,7 +1,7 @@
-package com.example.tenpo.config;
+package com.example.tenpo.filters;
 
 import com.example.tenpo.domain.RequestLog;
-import com.example.tenpo.repo.db.RequestLogRepository;
+import com.example.tenpo.repo.RequestLogRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -11,18 +11,19 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class RequestToDbRunnable implements Runnable{
+public class RequestToDatabaseRunnable implements Runnable{
 
 
+    private final int maxPayloadLength = 1000;
     private final RequestLogRepository requestLogRepository;
-    private Long endTime;
-    private Long startTime;
-    private ContentCachingRequestWrapper request;
-    private ContentCachingResponseWrapper response;
-    Logger logger = LoggerFactory.getLogger(RequestToDbRunnable.class);
+    private final Long endTime;
+    private final Long startTime;
+    private final ContentCachingRequestWrapper request;
+    private final ContentCachingResponseWrapper response;
+    private final Logger logger = LoggerFactory.getLogger(RequestToDatabaseRunnable.class);
 
 
-    public RequestToDbRunnable(Long startTime, Long endTime, ContentCachingRequestWrapper request, ContentCachingResponseWrapper response, RequestLogRepository requestLogRepository) {
+    public RequestToDatabaseRunnable(Long startTime, Long endTime, ContentCachingRequestWrapper request, ContentCachingResponseWrapper response, RequestLogRepository requestLogRepository) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.request = request;
@@ -34,19 +35,21 @@ public class RequestToDbRunnable implements Runnable{
 
     @Override
     public void run() {
+        saveRequestLogToDatabase();
+    }
+
+    private void saveRequestLogToDatabase() {
         logger.debug("Starting saving request to db");
-        LocalDateTime createdTime = LocalDateTime.now();
-        String method = request.getMethod();
-        String URI = request.getRequestURI();
+        LocalDateTime creationTime = LocalDateTime.now();
+        String httpMethod = request.getMethod();
+        String requestURI = request.getRequestURI();
         String queryString = request.getQueryString();
         if (queryString != null) {
-            URI = URI + "?" + queryString;
+            requestURI = requestURI + "?" + queryString;
         }
 
         String requestBody = this.getContentAsString(request.getContentAsByteArray(), this.maxPayloadLength, request.getCharacterEncoding());
-
         String principal = Optional.ofNullable(request.getUserPrincipal()).map(p ->p.getName()).orElse("");
-        String authType = request.getAuthType();
         Long elapsedTime = endTime-startTime;
         Integer responseStatus = response.getStatus();
         String responseBody = "";
@@ -57,12 +60,11 @@ public class RequestToDbRunnable implements Runnable{
 
 
         RequestLog log = RequestLog.builder()
-                .created(createdTime)
-                .httpMethod(method)
-                .resourceUri(URI)
+                .created(creationTime)
+                .httpMethod(httpMethod)
+                .resourceUri(requestURI)
                 .requestBody(requestBody)
                 .principal(principal)
-                .authType(authType)
                 .responseBody(responseBody)
                 .responseStatus(responseStatus)
                 .elapsedTime(elapsedTime)
@@ -72,7 +74,7 @@ public class RequestToDbRunnable implements Runnable{
         logger.debug("Finished saving request to db");
     }
 
-    private int maxPayloadLength = 1000;
+
 
     private String getContentAsString(byte[] buf, int maxLength, String charsetName) {
         if (buf == null || buf.length == 0) return "";

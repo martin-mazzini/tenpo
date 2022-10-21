@@ -1,4 +1,4 @@
-package com.example.tenpo.repo.rest.mock;
+package com.example.tenpo.repo.impl;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -9,6 +9,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Random;
 
+/**
+ * Mock for the Percentage Service.
+ * Returns a random percentage between 10 and 2
+ */
 @Component
 public class PercentageServiceMock extends RestTemplate {
 
