@@ -2,9 +2,7 @@ package com.example.tenpo.repository.impl;
 
 import com.example.tenpo.repository.PercentageRepository;
 import com.example.tenpo.service.TimeUtils;
-import com.example.tenpo.service.impl.RequestToDatabaseRunnable;
 import com.github.benmanes.caffeine.cache.Cache;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +55,7 @@ public class PercentageRepositoryImpl implements PercentageRepository {
         String cacheKey = getKey(now);
         Integer percentage = percentageCache.getIfPresent(cacheKey);
         if (percentage == null) {
-            percentage = resilienceAOPHelper.withRetryAndCircuitBreaker(() -> getPercentage(cacheKey));
+            percentage = resilienceAOPHelper.withRetry(() -> getPercentage(cacheKey));
         }
         return Optional.ofNullable(percentage);
     }
@@ -93,7 +91,7 @@ class ResilienceAOPHelper {
 
    // @CircuitBreaker(name = "percentageCircuitBreaker", fallbackMethod = "fallback")
     @Retry(name = "percentageRetry",  fallbackMethod = "fallback")
-    public Integer withRetryAndCircuitBreaker(Supplier<Integer> call) {
+    public Integer withRetry(Supplier<Integer> call) {
         logger.debug("Trying to get percentage");
         return call.get();
     }
