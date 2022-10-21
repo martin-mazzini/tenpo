@@ -1,9 +1,7 @@
-package com.example.tenpo.repo.impl;
+package com.example.tenpo.repository.impl;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpMessageConverterExtractor;
-import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 

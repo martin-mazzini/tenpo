@@ -1,4 +1,4 @@
-package com.example.tenpo.repo;
+package com.example.tenpo.repository;
 
 import java.util.Optional;
 

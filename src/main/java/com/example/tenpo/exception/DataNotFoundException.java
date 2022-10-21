@@ -1,4 +1,4 @@
-package com.example.tenpo.exceptions;
+package com.example.tenpo.exception;
 
 
 public class DataNotFoundException extends RuntimeException {

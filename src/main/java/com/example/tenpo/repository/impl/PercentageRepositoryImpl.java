@@ -1,11 +1,10 @@
-package com.example.tenpo.repo.impl;
+package com.example.tenpo.repository.impl;
 
-import com.example.tenpo.repo.PercentageRepository;
+import com.example.tenpo.repository.PercentageRepository;
 import com.example.tenpo.service.TimeUtils;
 import com.github.benmanes.caffeine.cache.Cache;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,11 +18,9 @@ public class PercentageRepositoryImpl implements PercentageRepository {
     private volatile CacheEntry lastCacheEntry;
     private Cache<String, Integer> percentageCache;
     public static final String SEPARATOR = "-";
-    @Value("${percentage.service.url}")
-    private  String serviceUrl;
+    private final String percentageServiceURL = "http://...";
     private TimeUtils timeUtils;
     private RestTemplate restTemplate;
-
 
     protected static class CacheEntry {
         private Integer percentage;
@@ -67,7 +64,7 @@ public class PercentageRepositoryImpl implements PercentageRepository {
     @CircuitBreaker(name = "percentageCircuitBreaker", fallbackMethod = "fallback")
     @Retry(name = "percentageRetry")
     public Integer fetchPercentage(String cacheKey) {
-        Integer newPercentage = restTemplate.getForObject(serviceUrl, Integer.class);
+        Integer newPercentage = restTemplate.getForObject(percentageServiceURL, Integer.class);
         CacheEntry cacheEntry = new CacheEntry(newPercentage, cacheKey);
         this.lastCacheEntry = cacheEntry;
         percentageCache.put(cacheKey, newPercentage);

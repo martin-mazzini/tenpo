@@ -1,6 +1,8 @@
-package com.example.tenpo.filters;
+package com.example.tenpo.configuration;
 
-import com.example.tenpo.repo.RequestLogRepository;
+
+import com.example.tenpo.service.impl.RequestToDatabaseRunnable;
+import com.example.tenpo.repository.RequestLogRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -44,7 +46,7 @@ public class AsyncRequestProcessorFilter extends OncePerRequestFilter {
         wrappedResponse.copyBodyToResponse();
         long endTime = System.currentTimeMillis();
 
-        RequestToDatabaseRunnable saveToDB = new RequestToDatabaseRunnable(startTime, endTime, wrappedRequest, wrappedResponse, requestLogRepository);
+        Runnable saveToDB = new RequestToDatabaseRunnable(startTime, endTime, wrappedRequest, wrappedResponse, requestLogRepository);
         logger.debug("Finished processing request");
         threadPool.submit(saveToDB);
         logger.debug("Task submited");

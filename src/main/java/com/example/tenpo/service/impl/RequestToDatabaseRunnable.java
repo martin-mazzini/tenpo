@@ -1,7 +1,8 @@
-package com.example.tenpo.filters;
+package com.example.tenpo.service.impl;
 
 import com.example.tenpo.domain.RequestLog;
-import com.example.tenpo.repo.RequestLogRepository;
+import com.example.tenpo.repository.RequestLogRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class RequestToDatabaseRunnable implements Runnable{
+public class RequestToDatabaseRunnable implements Runnable {
 
 
     private final int maxPayloadLength = 1000;

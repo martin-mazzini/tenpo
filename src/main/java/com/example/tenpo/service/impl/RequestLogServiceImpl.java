@@ -1,7 +1,7 @@
 package com.example.tenpo.service.impl;
 
 import com.example.tenpo.domain.RequestLog;
-import com.example.tenpo.repo.RequestLogRepository;
+import com.example.tenpo.repository.RequestLogRepository;
 import com.example.tenpo.service.RequestLogService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

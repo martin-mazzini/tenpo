@@ -1,4 +1,4 @@
-package com.example.tenpo.config;
+package com.example.tenpo.configuration;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;

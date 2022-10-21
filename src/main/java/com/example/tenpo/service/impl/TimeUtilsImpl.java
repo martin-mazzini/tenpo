@@ -13,7 +13,7 @@ public class TimeUtilsImpl implements TimeUtils {
     //returns 0 for first half hour, 1 for second half hour
     @Override
     public int getHalfHour(LocalDateTime date) {
-        return date.getMinute() <= 29 ? 0 : 1;
+        return date.getMinute() < 30 ? 0 : 1;
     }
 
 

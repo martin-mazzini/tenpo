@@ -1,6 +1,6 @@
 package com.example.tenpo.service.impl;
 
-import com.example.tenpo.repo.PercentageRepository;
+import com.example.tenpo.repository.PercentageRepository;
 import com.example.tenpo.service.SumService;
 import org.springframework.stereotype.Service;
 
