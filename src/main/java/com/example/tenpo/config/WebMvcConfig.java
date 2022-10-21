@@ -1,6 +1,5 @@
 package com.example.tenpo.config;
 
-import com.example.tenpo.DBRequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;

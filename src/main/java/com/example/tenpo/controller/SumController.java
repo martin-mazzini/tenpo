@@ -2,6 +2,7 @@ package com.example.tenpo.controller;
 
 
 import com.example.tenpo.service.SumService;
+import com.example.tenpo.service.impl.SumServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +13,7 @@ public class SumController {
 
     private SumService sumService;
 
-    public SumController(SumService sumService) {
+    public SumController(SumServiceImpl sumService) {
         this.sumService = sumService;
     }
 

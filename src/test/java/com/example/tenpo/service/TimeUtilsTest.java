@@ -1,18 +1,14 @@
 package com.example.tenpo.service;
 
+import com.example.tenpo.service.impl.TimeUtilsImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import org.mockito.Mockito;
-
-import java.sql.Time;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class TimeUtilsTest {
 
-    private TimeUtils timeUtils = new TimeUtils();
+    private TimeUtils timeUtils = new TimeUtilsImpl();
 
     @ParameterizedTest
     @CsvFileSource(resources = "/testdata/service/get_half_hour.csv", numLinesToSkip = 1)

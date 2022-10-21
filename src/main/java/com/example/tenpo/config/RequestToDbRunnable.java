@@ -1,18 +1,13 @@
-package com.example.tenpo;
+package com.example.tenpo.config;
 
 import com.example.tenpo.domain.RequestLog;
 import com.example.tenpo.repo.db.RequestLogRepository;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
