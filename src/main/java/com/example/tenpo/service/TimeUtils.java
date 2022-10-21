@@ -20,4 +20,7 @@ public class TimeUtils {
         return LocalDateTime.parse(s, DateTimeFormatter.ISO_DATE_TIME);
     }
 
+    public LocalDateTime getNow() {
+        return LocalDateTime.now();
+    }
 }

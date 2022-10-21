@@ -12,16 +12,16 @@ public class SumService {
     private PercentageRepository percentageRepository;
 
 
-    public SumService(TimeUtils timeUtils, PercentageRepository percentageRepository) {
+    public SumService(PercentageRepository percentageRepository) {
         this.percentageRepository = percentageRepository;
     }
 
-    public Optional<Integer> sum(int a, int b){
+    public Optional<Integer> sumAndApplyPercentage(int a, int b){
         Optional<Integer> percentageOpt = percentageRepository.getPercentage();
-        return percentageOpt.map(p->calculate(a,b,p));
+        return percentageOpt.map(p-> doSumAndApplyPercentage(a,b,p));
     }
 
-    private Integer calculate(int a, int b, Integer percentage) {
+    private Integer doSumAndApplyPercentage(int a, int b, Integer percentage) {
         int sum = a + b;
         int appliedPercentage = sum * percentage / 100;
         return sum + appliedPercentage;
