@@ -20,7 +20,7 @@ public class PercentageRepositoryImpl implements PercentageRepository {
 
 
     //volatile reference for thread safety
-    protected static volatile CacheEntry lastPercentage = new CacheEntry(null,null);
+    protected static volatile SingleValueCache lastPercentage = new SingleValueCache(null,null);
     public static final String SEPARATOR = "-";
     private final String percentageServiceURL = "http://...";
     private TimeUtils timeUtils;
@@ -29,19 +29,21 @@ public class PercentageRepositoryImpl implements PercentageRepository {
 
     
     //immutable, thread safe
-    protected static class CacheEntry {
+    protected static class SingleValueCache {
         private Integer percentage;
         private String key;
 
-        public CacheEntry(Integer percentage, String key) {
+        public SingleValueCache(Integer percentage, String key) {
             this.percentage = percentage;
             this.key = key;
         }
 
+        //returns percentage if matches key
         public Integer getIfMatches(String cacheKey) {
             return (key != null && key.equals(cacheKey)) ? percentage : null;
         }
 
+        //returns percentage
         public Integer getPercentage() {
             return percentage;
         }
@@ -66,7 +68,7 @@ public class PercentageRepositoryImpl implements PercentageRepository {
 
     private Integer getPercentage(String cacheKey) {
         Integer newPercentage = restTemplate.getForObject(percentageServiceURL, Integer.class);
-        CacheEntry cacheEntry = new CacheEntry(newPercentage, cacheKey);
+        SingleValueCache cacheEntry = new SingleValueCache(newPercentage, cacheKey);
         this.lastPercentage = cacheEntry;
         return newPercentage;
     }

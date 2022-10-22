@@ -24,8 +24,6 @@ class PercentageRepositoryImplTest {
 
     public static final Integer MAX_ATTEMPTS = 3;
 
-    @Autowired
-    private Cache<String, Integer> percentageCache;
 
     @SpyBean
     private TimeUtils timeUtils;
@@ -40,7 +38,6 @@ class PercentageRepositoryImplTest {
 
     @AfterEach
     public void after(){
-        percentageCache.invalidateAll();
     }
 
     @Test
@@ -50,6 +47,7 @@ class PercentageRepositoryImplTest {
         Optional<Integer> percentage = percentageRepository.getPercentage();
         Assertions.assertThat(percentage.isPresent());
         Assertions.assertThat(percentage.get()).isEqualTo(12);
+        Mockito.verify(restTemplate).getForObject(anyString(), any());
 
     }
 
@@ -66,6 +64,7 @@ class PercentageRepositoryImplTest {
 
         Assertions.assertThat(percentage2.isPresent());
         Assertions.assertThat(percentage2.get()).isEqualTo(12);
+        Mockito.verify(restTemplate, Mockito.times(1)).getForObject(anyString(), any());
 
     }
 
@@ -82,6 +81,7 @@ class PercentageRepositoryImplTest {
 
         Assertions.assertThat(percentage2.isPresent());
         Assertions.assertThat(percentage2.get()).isEqualTo(15);
+        Mockito.verify(restTemplate, Mockito.times(2)).getForObject(anyString(), any());
 
     }
 
@@ -110,6 +110,7 @@ class PercentageRepositoryImplTest {
         Mockito.when(restTemplate.getForObject(anyString(),any())).thenThrow(RestClientException.class);
         Optional<Integer> percentage = percentageRepository.getPercentage();
         Assertions.assertThat(percentage.isEmpty());
+
     }
 
     @Test
