@@ -41,8 +41,7 @@ Para implementar el feature de sumar dos números, primero hay que obtener el po
  2. Utilizar un cron (@Scheduled) que corra cada media hora, que consulte al servicio externo y guarde el resultado obtenido localmente. Luego el servicio interesado sólo debe consultar este campo.
  
 Se implementó la alternativa número 1. Una ventaja de este enfoque es que si no logramos obtener el porcentaje en un request, el siguiente request automáticamente va a reintentar. En el enfoque 2, no tendríamos dato nuevo hasta la siguiente media hora, al menos que implementos otra lógica adicional. El siguiente diagrama resume la lógica con más detalle.
-
-<img width="866" alt="tenpo" src="https://user-images.githubusercontent.com/25701657/197357502-b8d438c6-f81f-402a-8b3b-473062e5d754.png">
+<img width="847" alt="tenpo" src="https://user-images.githubusercontent.com/25701657/197362364-36060d0f-fd47-4a65-8634-cbe9ab905464.png">
 
 
 
