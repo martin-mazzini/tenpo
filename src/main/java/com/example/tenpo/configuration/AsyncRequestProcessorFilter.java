@@ -16,17 +16,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Component
 public class AsyncRequestProcessorFilter extends OncePerRequestFilter {
 
     private final RequestLogRepository requestLogRepository;
-    private final ExecutorService threadPool = Executors.newFixedThreadPool(10);
+    private final ExecutorService threadPool;
     private final Logger logger = LoggerFactory.getLogger(AsyncRequestProcessorFilter.class);
 
-    public AsyncRequestProcessorFilter(RequestLogRepository requestLogRepository) {
+    public AsyncRequestProcessorFilter(RequestLogRepository requestLogRepository, ExecutorService executorService) {
         this.requestLogRepository = requestLogRepository;
+        this.threadPool = executorService;
     }
 
 
@@ -51,8 +51,6 @@ public class AsyncRequestProcessorFilter extends OncePerRequestFilter {
         threadPool.submit(saveToDB);
         logger.debug("Task submited");
     }
-
-
 
 
 }

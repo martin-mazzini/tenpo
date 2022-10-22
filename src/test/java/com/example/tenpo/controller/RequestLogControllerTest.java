@@ -9,11 +9,13 @@ import com.example.tenpo.security.AuthToken;
 import com.example.tenpo.testutils.URI;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -41,18 +43,6 @@ class RequestLogControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-
-
-/*
-    @BeforeEach
-    public void setup() throws Exception {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
-                .addFilter(asyncRequestProcessorFilter)
-                .build();
-    }
-*/
-
-
     @Test
     void getRequestLogs() throws Exception {
 
@@ -68,7 +58,7 @@ class RequestLogControllerTest {
         GetRequestLogsResponse requestLogs = mapper.readValue(response.getContentAsString(), GetRequestLogsResponse.class);
 
         Assertions.assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        Assertions.assertThat(requestLogs.getRequestLog().size() == 3);
+        Assertions.assertThat(requestLogs.getRequestLog().size()).isEqualTo(3);
 
 
     }
