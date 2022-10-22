@@ -14,5 +14,11 @@ import java.util.List;
 @Builder
 public class GetRequestLogsResponse {
 
-    private List<RequestLog> requestLog;
+    private List<RequestLog> content;
+
+    private int pageNo;
+    private int pageSize;
+    private long totalElements;
+    private int totalPages;
+    private boolean last;
 }

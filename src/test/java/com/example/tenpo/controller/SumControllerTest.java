@@ -70,7 +70,6 @@ public class SumControllerTest {
         MockHttpServletResponse response = perform.andReturn().getResponse();
         int status = response.getStatus();
         Assertions.assertThat(status).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE.value());
-       // Assertions.assertThat(response.getContentAsString()).isTrue();
     }
 
 

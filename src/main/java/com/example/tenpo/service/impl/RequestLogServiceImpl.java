@@ -8,7 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 @Service
 public class RequestLogServiceImpl implements RequestLogService {
 
@@ -20,10 +19,9 @@ public class RequestLogServiceImpl implements RequestLogService {
 
 
     @Override
-    public List<RequestLog> getRequestLogs(int pageNo, int pageSize) {
+    public Page<RequestLog> getRequestLogs(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<RequestLog> all = requestLogRepository.findAll(pageable);
-        return all.getContent();
+        return requestLogRepository.findAll(pageable);
     }
 
 }

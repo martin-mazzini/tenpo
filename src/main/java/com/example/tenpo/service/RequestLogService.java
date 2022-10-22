@@ -1,9 +1,8 @@
 package com.example.tenpo.service;
 
 import com.example.tenpo.domain.RequestLog;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface RequestLogService {
-    List<RequestLog> getRequestLogs(int pageNo, int pageSize);
+    Page<RequestLog> getRequestLogs(int pageNo, int pageSize);
 }
