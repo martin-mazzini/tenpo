@@ -2,7 +2,6 @@ package com.example.tenpo.repository.impl;
 
 import com.example.tenpo.repository.PercentageRepository;
 import com.example.tenpo.service.TimeUtils;
-import com.github.benmanes.caffeine.cache.Cache;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,20 +13,22 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.example.tenpo.repository.impl.PercentageRepositoryImpl.lastCacheEntry;
+import static com.example.tenpo.repository.impl.PercentageRepositoryImpl.lastPercentage;
 
 @Repository
 public class PercentageRepositoryImpl implements PercentageRepository {
 
 
-    protected static volatile CacheEntry lastCacheEntry;
-    private Cache<String, Integer> percentageCache;
+    //volatile reference for thread safety
+    protected static volatile CacheEntry lastPercentage = new CacheEntry(null,null);
     public static final String SEPARATOR = "-";
     private final String percentageServiceURL = "http://...";
     private TimeUtils timeUtils;
     private RestTemplate restTemplate;
     private ResilienceAOPHelper resilienceAOPHelper;
 
+    
+    //immutable, thread safe
     protected static class CacheEntry {
         private Integer percentage;
         private String key;
@@ -37,14 +38,17 @@ public class PercentageRepositoryImpl implements PercentageRepository {
             this.key = key;
         }
 
+        public Integer getIfMatches(String cacheKey) {
+            return (key != null && key.equals(cacheKey)) ? percentage : null;
+        }
+
         public Integer getPercentage() {
             return percentage;
         }
     }
 
-    public PercentageRepositoryImpl(TimeUtils timeUtils, Cache<String, Integer> percentageCache, RestTemplate restTemplate, ResilienceAOPHelper resilienceAopHelper) {
+    public PercentageRepositoryImpl(TimeUtils timeUtils,  RestTemplate restTemplate, ResilienceAOPHelper resilienceAopHelper) {
         this.timeUtils = timeUtils;
-        this.percentageCache = percentageCache;
         this.restTemplate = restTemplate;
         this.resilienceAOPHelper = resilienceAopHelper;
     }
@@ -52,10 +56,10 @@ public class PercentageRepositoryImpl implements PercentageRepository {
     @Override
     public Optional<Integer> getPercentage() {
         LocalDateTime now = timeUtils.getNow();
-        String cacheKey = getKey(now);
-        Integer percentage = percentageCache.getIfPresent(cacheKey);
+        String halfHourCacheKey = getKey(now);
+        Integer percentage = lastPercentage.getIfMatches(halfHourCacheKey);
         if (percentage == null) {
-            percentage = resilienceAOPHelper.withRetry(() -> getPercentage(cacheKey));
+            percentage = resilienceAOPHelper.withRetry(() -> getPercentage(halfHourCacheKey));
         }
         return Optional.ofNullable(percentage);
     }
@@ -63,8 +67,7 @@ public class PercentageRepositoryImpl implements PercentageRepository {
     private Integer getPercentage(String cacheKey) {
         Integer newPercentage = restTemplate.getForObject(percentageServiceURL, Integer.class);
         CacheEntry cacheEntry = new CacheEntry(newPercentage, cacheKey);
-        this.lastCacheEntry = cacheEntry;
-        percentageCache.put(cacheKey, newPercentage);
+        this.lastPercentage = cacheEntry;
         return newPercentage;
     }
 
@@ -99,7 +102,7 @@ class ResilienceAOPHelper {
 
     public Integer fallback(Exception e) {
         logger.debug("Fallback method");
-        return lastCacheEntry != null ? lastCacheEntry.getPercentage() : null;
+        return lastPercentage != null ? lastPercentage.getPercentage() : null;
     }
 
 }
