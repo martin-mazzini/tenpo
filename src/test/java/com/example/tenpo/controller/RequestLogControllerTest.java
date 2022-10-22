@@ -1,4 +1,4 @@
-package com.example.tenpo.integration;
+package com.example.tenpo.controller;
 
 import com.example.tenpo.controller.response.GetRequestLogsResponse;
 import com.example.tenpo.testutils.DatabaseResetter;
@@ -24,7 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @SpringBootTest()
 @AutoConfigureMockMvc
-class GetRequestLogsIntegrationTest {
+class RequestLogControllerTest {
 
 
     @Autowired
@@ -64,6 +64,15 @@ class GetRequestLogsIntegrationTest {
 
 
 
+    @Test
+    void whenPageSizeExceedsLimit_return400() throws Exception {
+        MockHttpServletRequestBuilder getRequestLogsRequest = MockMvcRequestBuilders.get(URI.REQUEST_LOGS)
+                .param("size", "100")
+                .contentType(APPLICATION_JSON);
+        authorizeRequest(getRequestLogsRequest, mockMvc);
+        ResultActions response = this.mockMvc.perform(getRequestLogsRequest);
+        Assertions.assertThat(response.andReturn().getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
 
 
 

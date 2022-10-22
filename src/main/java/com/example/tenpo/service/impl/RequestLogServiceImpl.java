@@ -1,5 +1,6 @@
 package com.example.tenpo.service.impl;
 
+import com.example.tenpo.controller.response.GetRequestLogsResponse;
 import com.example.tenpo.domain.RequestLog;
 import com.example.tenpo.repository.RequestLogRepository;
 import com.example.tenpo.service.RequestLogService;
@@ -19,9 +20,18 @@ public class RequestLogServiceImpl implements RequestLogService {
 
 
     @Override
-    public Page<RequestLog> getRequestLogs(int pageNo, int pageSize) {
+    public GetRequestLogsResponse getRequestLogs(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return requestLogRepository.findAll(pageable);
+        Page<RequestLog> pageResponse = requestLogRepository.findAll(pageable);
+        GetRequestLogsResponse response = GetRequestLogsResponse.builder()
+                .content(pageResponse.getContent())
+                .pageNo(pageResponse.getNumber())
+                .pageSize(pageResponse.getSize())
+                .totalPages(pageResponse.getTotalPages())
+                .last(pageResponse.isLast())
+                .totalElements(pageResponse.getTotalElements()).build();
+
+        return response;
     }
 
 }

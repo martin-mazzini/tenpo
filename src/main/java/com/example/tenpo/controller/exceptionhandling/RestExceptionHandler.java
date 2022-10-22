@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Date;
 
 @ControllerAdvice
@@ -45,8 +46,11 @@ public class RestExceptionHandler
 	}
 
 
-
-
+	//hibernate validator for request params
+	@ExceptionHandler({ ConstraintViolationException.class})
+	public ResponseEntity<ErrorDetails> handleBadCredentialsDuringLoging(ConstraintViolationException ex, WebRequest request) {
+		return new ResponseEntity<>(constructError(new Date(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+	}
 
 
 	//hibernate validator

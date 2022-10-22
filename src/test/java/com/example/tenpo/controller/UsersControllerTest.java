@@ -1,4 +1,4 @@
-package com.example.tenpo.integration;
+package com.example.tenpo.controller;
 
 import com.example.tenpo.controller.request.LoginRequest;
 import com.example.tenpo.repository.UserRepository;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SignupLoginIntegrationTest {
+class UsersControllerTest {
 
 
     public static final String TEST_EMAIL = "martinmazzinigeo@gmail.com";
