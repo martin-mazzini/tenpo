@@ -133,5 +133,10 @@ class PercentageRepositoryImplTest {
         Mockito.when(timeUtils.getNow()).thenReturn(localDateTime);
     }
 
+    @Test
+    public void test(){
+        String date ="2044-03-01T23:29:00Z";
+        String key = percentageRepository.getKey(timeUtils.parseLocalDateTime(date));
+    }
 
 }

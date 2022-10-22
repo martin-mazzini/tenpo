@@ -18,13 +18,15 @@ public class RequestToDatabaseRunnable implements Runnable {
     private final int maxPayloadLength = 1000;
     private final RequestLogRepository requestLogRepository;
     private final Long endTime;
+    private LocalDateTime creationDateTime;
     private final Long startTime;
     private final ContentCachingRequestWrapper request;
     private final ContentCachingResponseWrapper response;
     private final Logger logger = LoggerFactory.getLogger(RequestToDatabaseRunnable.class);
 
 
-    public RequestToDatabaseRunnable(Long startTime, Long endTime, ContentCachingRequestWrapper request, ContentCachingResponseWrapper response, RequestLogRepository requestLogRepository) {
+    public RequestToDatabaseRunnable(LocalDateTime creationDateTime, Long startTime, Long endTime, ContentCachingRequestWrapper request, ContentCachingResponseWrapper response, RequestLogRepository requestLogRepository) {
+        this.creationDateTime = creationDateTime;
         this.startTime = startTime;
         this.endTime = endTime;
         this.request = request;
@@ -41,7 +43,6 @@ public class RequestToDatabaseRunnable implements Runnable {
 
     private void saveRequestLogToDatabase() {
         logger.debug("Starting saving request to db");
-        LocalDateTime creationTime = LocalDateTime.now();
         String httpMethod = request.getMethod();
         String requestURI = request.getRequestURI();
         String queryString = request.getQueryString();
@@ -61,7 +62,7 @@ public class RequestToDatabaseRunnable implements Runnable {
 
 
         RequestLog log = RequestLog.builder()
-                .created(creationTime)
+                .created(creationDateTime)
                 .httpMethod(httpMethod)
                 .resourceUri(requestURI)
                 .requestBody(requestBody)

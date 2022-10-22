@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.concurrent.ExecutorService;
 
 @Component
@@ -45,7 +46,7 @@ public class AsyncRequestProcessorFilter extends OncePerRequestFilter {
         wrappedResponse.copyBodyToResponse();
         long endTime = System.currentTimeMillis();
 
-        Runnable saveToDB = new RequestToDatabaseRunnable(startTime, endTime, wrappedRequest, wrappedResponse, requestLogRepository);
+        Runnable saveToDB = new RequestToDatabaseRunnable(LocalDateTime.now(), startTime, endTime, wrappedRequest, wrappedResponse, requestLogRepository);
         logger.debug("Finished processing request");
         threadPool.submit(saveToDB);
         logger.debug("Task submited");
