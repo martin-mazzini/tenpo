@@ -38,7 +38,6 @@ public class AsyncRequestProcessorFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, ServletException, IOException {
-
         long startTime = System.currentTimeMillis();
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
@@ -50,6 +49,7 @@ public class AsyncRequestProcessorFilter extends OncePerRequestFilter {
         logger.debug("Finished processing request");
         threadPool.submit(saveToDB);
         logger.debug("Task submited");
+
     }
 
 

@@ -6,12 +6,16 @@ import com.example.tenpo.controller.request.LoginRequest;
 import com.example.tenpo.controller.response.GetRequestLogsResponse;
 import com.example.tenpo.domain.RequestLog;
 import com.example.tenpo.security.AuthToken;
+import com.example.tenpo.testutils.DatabaseResetter;
 import com.example.tenpo.testutils.URI;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.checkerframework.checker.units.qual.A;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,13 +39,23 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @AutoConfigureMockMvc
 class RequestLogControllerTest {
 
-    private ObjectMapper mapper = new ObjectMapper();
+
+    @Autowired
+    private ObjectMapper mapper;
 
     @Autowired
     private WebApplicationContext context;
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private DatabaseResetter databaseResetter;
+
+    @AfterEach
+    public void after(){
+        databaseResetter.resetDatabaseState();
+    }
 
     @Test
     void getRequestLogs() throws Exception {
@@ -58,7 +72,7 @@ class RequestLogControllerTest {
         GetRequestLogsResponse requestLogs = mapper.readValue(response.getContentAsString(), GetRequestLogsResponse.class);
 
         Assertions.assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        Assertions.assertThat(requestLogs.getRequestLog().size()).isEqualTo(3);
+        Assertions.assertThat(requestLogs.getRequestLog().size()).isEqualTo(5);
 
 
     }

@@ -4,15 +4,19 @@ import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.*;
 
-
+@Component
+@Primary
 public class SameThreadExecutorService extends ThreadPoolExecutor {
 
-
-
+    /**
+     * Thread pool que ejecuta las tasks en el mismo hilo,
+     * para tener resultados deterministas en los tests
+     */
 
     private final CountDownLatch signal = new CountDownLatch(1);
 

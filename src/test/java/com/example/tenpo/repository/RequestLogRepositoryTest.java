@@ -1,7 +1,9 @@
 package com.example.tenpo.repository;
 
 import com.example.tenpo.domain.RequestLog;
+import com.example.tenpo.testutils.DatabaseResetter;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,14 @@ class RequestLogRepositoryTest {
 
     @Autowired
     private RequestLogRepository requestLogRepository;
+
+    @Autowired
+    private DatabaseResetter databaseResetter;
+
+    @AfterEach
+    public void after(){
+        databaseResetter.resetDatabaseState();
+    }
 
 
     @Test
