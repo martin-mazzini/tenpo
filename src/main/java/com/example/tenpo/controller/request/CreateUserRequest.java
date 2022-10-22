@@ -14,24 +14,24 @@ import java.util.List;
 @Setter
 public class CreateUserRequest {
 	
-	@NotNull(message="El primer nombre no puede ser vacío")
-	@Size(min=2, message= "El primer nombre debe tener más de dos caracteres")
-	@ApiModelProperty(value="Nombre de más de dos caracteres", example = "Martín", required = true)
+	@NotNull(message="First name can´t be empty")
+	@Size(min=2, message= "First name has to have more than 2 characters")
+	@ApiModelProperty(value="First name with more than 2 characters", example = "Martín", required = true)
 	private String firstName;
 
-	@NotNull(message="El apellido no puede ser vacío")
-	@Size(min=2, message= "El apellido debe tener más de dos caracteres")
-	@ApiModelProperty(value="Apellido de más de dos caracteres", example = "Mazzini", required = true)
+	@NotNull(message="Last name can´t be empty")
+	@Size(min=2, message= "Last name has to have more than 2 characters")
+	@ApiModelProperty(value="Last name with more than 2 characters", example = "Mazzini", required = true)
 	private String lastName;
 	
-	@NotNull(message="Password no puede ser vacía")
-	@Size(min=8, max=16, message="La password debe tener entre 8 y 17 caracteres")
-	@ApiModelProperty(value="Password entre 8 y 17 caracteres", example = "m123456789", required = true)
+	@NotNull(message="Password  can´t be empty")
+	@Size(min=8, max=16, message="Password has to have between 8 y 17 caracteres")
+	@ApiModelProperty(value="Password with between 8 y 17 caracteres", example = "m123456789", required = true)
 	private String password;
 	
-	@NotNull(message="El email no puede ser vacío")
+	@NotNull(message="Email can´t be empty")
 	@Email
-	@ApiModelProperty(value="Email con formato válido", example = "martinmazzinigeo@gmail.com",required = true)
+	@ApiModelProperty(value="Valid email", example = "martinmazzinigeo@gmail.com",required = true)
 	private String email;
 
 

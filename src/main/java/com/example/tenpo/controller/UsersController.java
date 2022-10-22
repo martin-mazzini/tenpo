@@ -44,11 +44,8 @@ public class UsersController {
 	}
 
 	@PostMapping
-	@ApiOperation(value="Crear un nuevo usuario",
-			response = CreateUserResponse.class)
-	@ApiResponses(value = {
-			@ApiResponse(code = 422, message = "Ya existe otra usuario con el mismo email.")}
-	)
+	@ApiOperation(value="Create a new user", response = CreateUserResponse.class)
+	@ApiResponses(value = {@ApiResponse(code = 409, message = "Email is already in use")})
 	public ResponseEntity<CreateUserResponse> register(@Valid @RequestBody CreateUserRequest userDetails)
 	{
 
@@ -60,9 +57,9 @@ public class UsersController {
 
 
 	@PostMapping("/login")
-	@ApiOperation(value="Loguearse a la aplicación.",
-			response = AuthToken.class)
-	public ResponseEntity<AuthToken> login(@RequestBody LoginRequest loginUser) {
+	@ApiOperation(value="Login", response = AuthToken.class)
+	@ApiResponses(value = {@ApiResponse(code = 404, message = "User or password don´t exist")})
+	public ResponseEntity<AuthToken> login(@Valid @RequestBody LoginRequest loginUser) {
 
 		final Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(

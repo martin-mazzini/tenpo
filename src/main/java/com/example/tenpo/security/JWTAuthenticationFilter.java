@@ -41,21 +41,19 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 
 
-		String header = httpServletRequest.getHeader(HEADER_STRING);
-		Optional<String> authTokenOpt = jwtTokenUtil.parseHeader(header);
-		Optional<String> usernameOpt = authTokenOpt.map(token -> jwtTokenUtil.parseUsername(token));
+		Optional<String> tokenOpt = Optional.ofNullable(httpServletRequest.getHeader(HEADER_STRING));
+		Optional<String> usernameOpt = tokenOpt.map(token -> jwtTokenUtil.parseUsername(token));
 
 
 		if (usernameOpt.isPresent() && isNotAuthenticated()) {
 
 			String username = usernameOpt.get();
-			String authToken = authTokenOpt.get();
+			String authToken = tokenOpt.get();
 			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
 			if (jwtTokenUtil.validateToken(authToken, userDetails)) {
 				UsernamePasswordAuthenticationToken authentication = jwtTokenUtil.getAuthenticationToken(authToken, userDetails);
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-				logger.debug("Usuario autenticado " + username + ", seteando security context");
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		}

@@ -3,6 +3,8 @@ package com.example.tenpo.controller;
 
 import com.example.tenpo.service.SumService;
 import com.example.tenpo.service.impl.SumServiceImpl;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,9 @@ public class SumController {
 
 
     @GetMapping
+    @ApiResponses(value = {
+            @ApiResponse(code = 422, message = "sumar dos numeros y aplicarse un porcentaje")}
+    )
     public ResponseEntity<Integer> sum(@RequestParam("a") int a, @RequestParam("b") int b) {
         return sumService.sumAndApplyPercentage(a,b)
                 .map(sum -> ResponseEntity.ok(sum))

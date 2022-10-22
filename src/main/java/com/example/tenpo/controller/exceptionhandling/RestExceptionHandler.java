@@ -6,6 +6,7 @@ import com.example.tenpo.exception.ServiceUnavailableException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,28 +20,29 @@ public class RestExceptionHandler
 		extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler({DataNotFoundException.class})
-	public ResponseEntity<ErrorDetails> handleDataNotFound(
-			DataNotFoundException ex, WebRequest request) {
+	public ResponseEntity<ErrorDetails> handleDataNotFound(DataNotFoundException ex, WebRequest request) {
 		return new ResponseEntity<>(constructError(new Date(), ex.getMessage()), HttpStatus.NOT_FOUND);
 	}
 
 
 
 	@ExceptionHandler({ NotUniqueException.class})
-	public ResponseEntity<ErrorDetails> handleNotUnique(
-			NotUniqueException ex, WebRequest request) {
+	public ResponseEntity<ErrorDetails> handleNotUnique(NotUniqueException ex, WebRequest request) {
 		return new ResponseEntity<>(constructError(new Date(), ex.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
 
 	@ExceptionHandler({ ServiceUnavailableException.class})
-	public ResponseEntity<ErrorDetails> handleServiceUnavailableException(
-			ServiceUnavailableException ex, WebRequest request) {
+	public ResponseEntity<ErrorDetails> handleServiceUnavailableException(ServiceUnavailableException ex, WebRequest request) {
 		return new ResponseEntity<>(constructError(new Date(), ex.getMessage()), HttpStatus.SERVICE_UNAVAILABLE);
 	}
 
 
 
+	@ExceptionHandler({ BadCredentialsException.class})
+	public ResponseEntity<ErrorDetails> handleBadCredentialsDuringLoging(BadCredentialsException ex, WebRequest request) {
+		return new ResponseEntity<>(constructError(new Date(), "User or password don´t exist"), HttpStatus.NOT_FOUND);
+	}
 
 
 

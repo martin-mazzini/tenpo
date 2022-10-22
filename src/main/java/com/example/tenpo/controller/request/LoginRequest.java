@@ -13,15 +13,15 @@ import javax.validation.constraints.Size;
 public class LoginRequest {
 
 
-	@NotNull(message="El email no puede ser vacío")
-	@Email
-	@ApiModelProperty(value="Email con formato válido", example = "martinmazzinigeo@gmail.com", required = true)
+	@NotNull(message="Email can´t be empty")
+	@Email(message = "Not a valid email format")
+	@ApiModelProperty(value="Valid email", example = "martinmazzinigeo@gmail.com", required = true)
 	private String email;
 
 
-	@NotNull(message="Password no puede ser vacía")
-	@Size(min=8, max=16, message="La password debe tener entre 8 y 17 caracteres")
-	@ApiModelProperty(value="Password entre 8 y 17 caracteres", example = "m123456789", required = true)
+	@NotNull(message="Password can´t be empty")
+	@Size(min=8, max=16, message="Password size has to be between 8 and 17 characters")
+	@ApiModelProperty(value="Password between 8 and 17 characters", example = "m123456789", required = true)
 	private String password;
 
 

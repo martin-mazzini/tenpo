@@ -94,14 +94,6 @@ public class JWTTokenUtils implements Serializable {
     }
 
 
-	public  Optional<String> parseHeader(String header) {
-		if (header != null) {
-			return Optional.of(header);
-		}else {
-			log.debug("No se halló el bearer string. Se ignorará el header");
-			return Optional.empty();
-		}
-	}
 
 	public String parseUsername(String authToken) {
 		String username = null;
