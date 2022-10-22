@@ -128,24 +128,10 @@ class PercentageRepositoryImplTest {
         Assertions.assertThat(percentage.get()).isEqualTo(20);
     }
 
-
-
-
-
     private void mockTime(String dateTime) {
         LocalDateTime localDateTime = timeUtils.parseLocalDateTime(dateTime);
         Mockito.when(timeUtils.getNow()).thenReturn(localDateTime);
     }
 
-    @Test
-    void getKey() {
-    }
 
-    @Test
-    void fetchPercentage() {
-    }
-
-    @Test
-    void fetchPercentageFallback() {
-    }
 }

@@ -2,11 +2,10 @@ package com.example.tenpo.controller;
 
 import com.example.tenpo.controller.request.CreateUserRequest;
 import com.example.tenpo.controller.request.LoginRequest;
-import com.example.tenpo.domain.UserEntity;
 import com.example.tenpo.repository.UserRepository;
+import com.example.tenpo.security.AuthToken;
 import com.example.tenpo.testutils.DatabaseResetter;
 import com.example.tenpo.testutils.URI;
-import com.example.tenpo.testutils.UserUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
@@ -16,13 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.xml.crypto.Data;
+import java.io.UnsupportedEncodingException;
 
+import static java.lang.String.format;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -56,15 +57,8 @@ class UsersControllerTest {
     @Test
     void whenLoginSuccesfully_thenReturn200() throws Exception {
 
-        executeUserCreationRequest();
-        LoginRequest createRequest = LoginRequest.builder()
-                .email(TEST_EMAIL)
-                .password(TEST_PASSWORD)
-                .build();
-
-        ResultActions perform = this.mockMvc.perform(MockMvcRequestBuilders.post(URI.USERS_LOGIN)
-                .content(mapper.writeValueAsString(createRequest))
-                .contentType(APPLICATION_JSON));
+        performUserCreation(TEST_EMAIL, TEST_PASSWORD);
+        ResultActions perform = performLogin(TEST_EMAIL, TEST_PASSWORD);
 
         int status = perform.andReturn().getResponse().getStatus();
         Assertions.assertThat(status).isEqualTo(HttpStatus.OK.value());
@@ -74,30 +68,27 @@ class UsersControllerTest {
     void whenLoginAndUserNotExists_thenReturn404() throws Exception {
 
 
-        LoginRequest createRequest = LoginRequest.builder()
-                .email(TEST_EMAIL)
-                .password(TEST_PASSWORD)
-                .build();
-
-        ResultActions perform = this.mockMvc.perform(MockMvcRequestBuilders.post(URI.USERS_LOGIN)
-                .content(mapper.writeValueAsString(createRequest))
-                .contentType(APPLICATION_JSON));
+        ResultActions perform = performLogin(TEST_EMAIL, TEST_PASSWORD);
 
         int status = perform.andReturn().getResponse().getStatus();
         Assertions.assertThat(status).isEqualTo(HttpStatus.NOT_FOUND.value());
 
     }
 
-    @Test
-    void whenLoginInvalidRequest_thenReturn400() throws Exception {
+    public ResultActions performLogin(String testEmail, String testPassword) throws Exception {
         LoginRequest createRequest = LoginRequest.builder()
-                .email("bad email format")
-                .password("tooooooooo long of a password")
+                .email(testEmail)
+                .password(testPassword)
                 .build();
 
-        ResultActions perform = this.mockMvc.perform(MockMvcRequestBuilders.post(URI.USERS_LOGIN)
+        return this.mockMvc.perform(MockMvcRequestBuilders.post(URI.USERS_LOGIN)
                 .content(mapper.writeValueAsString(createRequest))
                 .contentType(APPLICATION_JSON));
+    }
+
+    @Test
+    void whenLoginInvalidRequest_thenReturn400() throws Exception {
+        ResultActions perform = performLogin("bad email format", "tooooooooo long of a password");
 
         int status = perform.andReturn().getResponse().getStatus();
         Assertions.assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -108,7 +99,7 @@ class UsersControllerTest {
     @Test
     void whenCreateUserSuccesfully_thenReturn200() throws Exception {
 
-        ResultActions perform = executeUserCreationRequest();
+        ResultActions perform = performUserCreation(TEST_EMAIL, TEST_PASSWORD);
         int status = perform.andReturn().getResponse().getStatus();
         Assertions.assertThat(status).isEqualTo(HttpStatus.OK.value());
     }
@@ -116,8 +107,8 @@ class UsersControllerTest {
 
     @Test
     void whenUserAlreadyExists_thenReturn409() throws Exception {
-        executeUserCreationRequest();
-        ResultActions result  = executeUserCreationRequest();
+        performUserCreation(TEST_EMAIL, TEST_PASSWORD);
+        ResultActions result  = performUserCreation(TEST_EMAIL, TEST_PASSWORD);
         int status = result.andReturn().getResponse().getStatus();
         Assertions.assertThat(status).isEqualTo(HttpStatus.CONFLICT.value());
     }
@@ -125,16 +116,7 @@ class UsersControllerTest {
     @Test
     void whenCreateUserInvalidRequest_thenReturn400() throws Exception {
 
-        CreateUserRequest createRequest =  CreateUserRequest.builder()
-                .email("BAD_EMAIL_FORMAT")
-                .password("m123456789")
-                .firstName("Martin")
-                .lastName("Mazzini")
-                .build();
-
-        ResultActions perform = this.mockMvc.perform(MockMvcRequestBuilders.post(URI.USERS)
-                .content(mapper.writeValueAsString(createRequest))
-                .contentType(APPLICATION_JSON));
+        ResultActions perform = performUserCreation("BAD_EMAIL_FORMAT", TEST_PASSWORD);
 
         int status = perform.andReturn().getResponse().getStatus();
         Assertions.assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -142,10 +124,10 @@ class UsersControllerTest {
     }
 
 
-    private ResultActions executeUserCreationRequest() throws Exception {
+    public  ResultActions performUserCreation(String email, String password) throws Exception {
         CreateUserRequest createRequest =  CreateUserRequest.builder()
-                .email("martinmazzinigeo@gmail.com")
-                .password("m123456789")
+                .email(email)
+                .password(password)
                 .firstName("Martin")
                 .lastName("Mazzini")
                 .build();
@@ -155,5 +137,36 @@ class UsersControllerTest {
                 .contentType(APPLICATION_JSON));
         return perform;
     }
+
+
+    @Test
+    void whenNotLogged_thenDontAuthorizeRequest() throws Exception {
+        ResultActions perform = this.mockMvc.perform(MockMvcRequestBuilders.get(URI.PING)
+                .contentType(APPLICATION_JSON));
+
+        int status = perform.andReturn().getResponse().getStatus();
+        Assertions.assertThat(status).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    void whenLogged_thenAuthorizeRequest() throws Exception {
+
+        ResultActions resultActions = performUserCreation(TEST_EMAIL, TEST_PASSWORD);
+        ResultActions loginResult = performLogin(TEST_EMAIL, TEST_PASSWORD);
+
+        AuthToken authToken = mapper.readValue(loginResult.andReturn().getResponse().getContentAsString(), AuthToken.class);
+
+        ResultActions perform = this.mockMvc.perform(MockMvcRequestBuilders.get(URI.PING)
+                .header("Authorization", authToken.getToken())
+        );
+        MockHttpServletResponse response = perform.andReturn().getResponse();
+
+        int status = perform.andReturn().getResponse().getStatus();
+        Assertions.assertThat(status).isEqualTo(HttpStatus.OK.value());
+    }
+
+
+
+
 
 }
