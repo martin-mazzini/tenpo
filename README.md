@@ -9,7 +9,7 @@ Hola! Soy Martín Mazzini, gracias por revisar este proyecto. Incluí este readm
  1. Clonar el repositorio
  2. Ejecutar el comando `docker-compose up`. 
  3. Para probar la API hay dos opciones:
-	 a. Navegar a **[http://localhost:8080/swagger-ui/index.html](http://localhost:8081/swagger-ui/index.html)**. 
+	 a. Navegar a **[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)**. 
 	 b. Utilizar el collection de Postman adjunto. 
 
   
