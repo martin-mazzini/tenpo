@@ -71,7 +71,7 @@ class RequestLogControllerTest {
                 .contentType(APPLICATION_JSON);
         authorizeRequest(getRequestLogsRequest, mockMvc);
         ResultActions response = this.mockMvc.perform(getRequestLogsRequest);
-        Assertions.assertThat(response.andReturn().getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+        Assertions.assertThat(response.andReturn().getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
 
