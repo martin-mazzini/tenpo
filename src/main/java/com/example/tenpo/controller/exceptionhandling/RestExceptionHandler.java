@@ -28,7 +28,7 @@ public class RestExceptionHandler
 
 	@ExceptionHandler({ NotUniqueException.class})
 	public ResponseEntity<ErrorDetails> handleNotUnique(NotUniqueException ex, WebRequest request) {
-		return new ResponseEntity<>(constructError(new Date(), ex.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+		return new ResponseEntity<>(constructError(new Date(), ex.getMessage()), HttpStatus.CONFLICT);
 	}
 
 
