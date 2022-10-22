@@ -23,7 +23,10 @@ public class SumServiceImpl implements SumService {
         return percentageOpt.map(p-> doSumAndApplyPercentage(a,b,p));
     }
 
-    private Integer doSumAndApplyPercentage(int a, int b, Integer percentage) {
+    public Integer doSumAndApplyPercentage(int a, int b, Integer percentage) {
+        if (percentage < 0 || percentage > 100){
+            throw new IllegalArgumentException("Percentage should be between 0 and 100");
+        }
         int sum = a + b;
         int appliedPercentage = sum * percentage / 100;
         return sum + appliedPercentage;

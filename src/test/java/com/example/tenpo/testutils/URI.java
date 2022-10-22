@@ -12,4 +12,6 @@ public class URI {
 
     public static String REQUEST_LOGS = BASE_URL + "/requestlogs";
 
+    public static String SUM = BASE_URL + "/sum";
+
 }

@@ -30,7 +30,7 @@ class PingControllerTest {
     }
 
     @Test
-    void health() throws Exception {
+    void whenPing_return200() throws Exception {
 
         ResultActions perform = this.mockMvc.perform(MockMvcRequestBuilders.get(URI.PING)
                 .contentType(APPLICATION_JSON));

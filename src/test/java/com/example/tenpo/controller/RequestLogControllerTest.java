@@ -58,7 +58,7 @@ class RequestLogControllerTest {
     }
 
     @Test
-    void getRequestLogs() throws Exception {
+    void whenGetRequestLogs_getTheFullListOfRequestsExecuted() throws Exception {
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(URI.PING).contentType(APPLICATION_JSON);
         authorizeRequest(request, mockMvc);
