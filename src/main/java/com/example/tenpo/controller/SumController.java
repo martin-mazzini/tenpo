@@ -1,6 +1,7 @@
 package com.example.tenpo.controller;
 
 
+import com.example.tenpo.controller.response.SumResponse;
 import com.example.tenpo.service.SumService;
 import com.example.tenpo.service.impl.SumServiceImpl;
 import io.swagger.annotations.ApiResponse;
@@ -25,7 +26,7 @@ public class SumController {
     @ApiResponses(value = {
             @ApiResponse(code = 503, message = "External percentage service unavailable")}
     )
-    public ResponseEntity<Integer> sum(@RequestParam("a") int a, @RequestParam("b") int b) {
+    public ResponseEntity<SumResponse> sum(@RequestParam("a") int a, @RequestParam("b") int b) {
         return sumService.sumAndApplyPercentage(a,b)
                 .map(sum -> ResponseEntity.ok(sum))
                 .orElse(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build());

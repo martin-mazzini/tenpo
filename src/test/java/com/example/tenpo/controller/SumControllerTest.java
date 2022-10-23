@@ -1,7 +1,9 @@
 package com.example.tenpo.controller;
 
+import com.example.tenpo.controller.response.SumResponse;
 import com.example.tenpo.service.SumService;
 import com.example.tenpo.testutils.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +34,9 @@ public class SumControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
+    private ObjectMapper mapper;
+
+    @Autowired
     private WebApplicationContext context;
 
     @SpyBean
@@ -54,7 +59,8 @@ public class SumControllerTest {
         MockHttpServletResponse response = perform.andReturn().getResponse();
         int status = response.getStatus();
         Assertions.assertThat(status).isEqualTo(HttpStatus.OK.value());
-        Assertions.assertThat(isNumeric(response.getContentAsString())).isTrue();
+        SumResponse sumResponse = mapper.readValue(response.getContentAsString(), SumResponse.class);
+        Assertions.assertThat(sumResponse.getA() == 10).isTrue();
     }
 
     @Test

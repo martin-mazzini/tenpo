@@ -1,5 +1,6 @@
 package com.example.tenpo.service.impl;
 
+import com.example.tenpo.controller.response.SumResponse;
 import com.example.tenpo.repository.PercentageRepository;
 import com.example.tenpo.service.SumService;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,13 @@ public class SumServiceImpl implements SumService {
     }
 
     @Override
-    public Optional<Integer> sumAndApplyPercentage(int a, int b){
+    public Optional<SumResponse> sumAndApplyPercentage(int a, int b){
         Optional<Integer> percentageOpt = percentageRepository.getPercentage();
-        return percentageOpt.map(p-> doSumAndApplyPercentage(a,b,p));
+        Optional<Integer> result = percentageOpt.map(p -> doSumAndApplyPercentage(a, b, p));
+        return result.map(r -> SumResponse.builder().a(a).b(b)
+                .appliedPercentage(percentageOpt.get())
+                .result(r)
+                .build());
     }
 
     public Integer doSumAndApplyPercentage(int a, int b, Integer percentage) {
