@@ -60,7 +60,6 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	@Override public UserEntity findByEmail(String email) {
-
 		return usersRepository.findByEmail(email);
 	}
 

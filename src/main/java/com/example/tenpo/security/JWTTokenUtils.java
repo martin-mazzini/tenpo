@@ -61,11 +61,9 @@ public class JWTTokenUtils implements Serializable {
 	public Optional<String> getToken(HttpServletRequest request) {
 		return Optional.ofNullable(request.getHeader(HEADER_STRING))
 				.filter(token -> StringUtils.hasText(token) && token.startsWith(TOKEN_PREFIX))
-				.map(bearerToken -> bearerToken.substring(7, bearerToken.length()));
+				.map(bearerToken -> bearerToken.substring(STARTING_TOKEN_INDEX));
 	}
 
-
-    //genera el jwt token a partir de la autenticacion
     public String generateToken(Authentication authentication) {
         		return  TOKEN_PREFIX + Jwts.builder()
                 .setSubject(authentication.getName())
@@ -89,12 +87,16 @@ public class JWTTokenUtils implements Serializable {
 		String username = null;
 		try {
 			username = getUsernameFromToken(authToken);
-		} catch (IllegalArgumentException e) {
-			log.error("Ocurrió un error al obtener el nombre del token", e);
-		} catch (ExpiredJwtException e) {
-			log.debug("El token expiró", e);
-		} catch (SignatureException e) {
-			log.error("Falló la autenticación, password o usuario no válidos.");
+		}catch (SignatureException ex){
+			System.out.println("Invalid JWT Signature");
+		}catch (MalformedJwtException ex){
+			System.out.println("Invalid JWT Token");
+		}catch (ExpiredJwtException ex){
+			System.out.println("Expired JWT token");
+		}catch (UnsupportedJwtException ex){
+			System.out.println("Unsupported JWT token");
+		}catch (IllegalArgumentException ex){
+			System.out.println("JWT claims string is empty");
 		}
 		return username;
 	}
