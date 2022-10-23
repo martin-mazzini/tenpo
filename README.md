@@ -11,7 +11,7 @@ Hola! Soy Martín, gracias por revisar este proyecto. Incluí un readme para ayu
  2. Ejecutar el comando `docker-compose up`. 
  3. Para probar la API hay dos opciones:
 	 1. Navegar a **[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)** y utilizar la UI interactiva.
-	 2. Utilizar el collection de Postman adjunto. 
+	 2. Utilizar el collection de Postman adjunto.
 
 ## ¿Cómo loguearse?
 
@@ -36,7 +36,7 @@ Para los pasos 1 y 2 los datos de un user se encuentran pre-cargado (tanto en la
 Para la API REST se utilizó autenticación con **JWT** (usando **Spring Security** + **io.jsonwebtoken**).
   
 ## Documentación de la API  
-La API está documentada utilizando la librería Springfox Swagger. 
+La API está documentada utilizando la librería Springfox Swagger, incluyendo todos los potenciales de código de error.
  - http://localhost:8080/swagger-ui/index.html para UI interactiva
  - http://localhost:8080/v2/api-docs para documentación en formato JSON.    
   
