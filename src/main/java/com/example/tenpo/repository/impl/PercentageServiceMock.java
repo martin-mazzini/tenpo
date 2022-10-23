@@ -9,7 +9,7 @@ import java.util.Random;
 
 /**
  * Mock for the Percentage Service.
- * Returns a random percentage between 10 and 2
+ * Returns a random percentage between 10 and 12
  */
 @Component
 public class PercentageServiceMock extends RestTemplate {

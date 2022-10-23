@@ -19,7 +19,7 @@ import static com.example.tenpo.repository.impl.PercentageRepositoryImpl.lastPer
 public class PercentageRepositoryImpl implements PercentageRepository {
 
 
-    //volatile reference for thread safety
+    //volatile reference para thread safety
     protected static volatile SingleValueCache lastPercentage = new SingleValueCache(null,null);
     public static final String SEPARATOR = "-";
     private final String percentageServiceURL = "http://...";
@@ -30,8 +30,8 @@ public class PercentageRepositoryImpl implements PercentageRepository {
     
     //immutable, thread safe
     protected static class SingleValueCache {
-        private Integer percentage;
-        private String key;
+        private final Integer percentage;
+        private final String key;
 
         public SingleValueCache(Integer percentage, String key) {
             this.percentage = percentage;
