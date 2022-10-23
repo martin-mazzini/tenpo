@@ -80,7 +80,7 @@ public class JWTTokenUtils implements Serializable {
 	}
 
 
-    UsernamePasswordAuthenticationToken getAuthenticationToken(String token, UserDetails userDetails) {
+    public UsernamePasswordAuthenticationToken getAuthenticationToken(String token, UserDetails userDetails) {
 
         final JwtParser jwtParser = Jwts.parser().setSigningKey(SIGNING_KEY);
 

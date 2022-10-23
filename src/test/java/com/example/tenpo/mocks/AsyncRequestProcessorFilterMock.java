@@ -1,6 +1,6 @@
 package com.example.tenpo.mocks;
 
-import com.example.tenpo.configuration.AsyncRequestProcessorFilter;
+import com.example.tenpo.filters.AsyncRequestProcessorFilter;
 import com.example.tenpo.repository.RequestLogRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;

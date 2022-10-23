@@ -1,4 +1,4 @@
-package com.example.tenpo.configuration;
+package com.example.tenpo.filters;
 
 
 import com.example.tenpo.domain.RequestLog;

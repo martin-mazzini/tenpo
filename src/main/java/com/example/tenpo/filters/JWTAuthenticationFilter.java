@@ -1,5 +1,6 @@
-package com.example.tenpo.security;
+package com.example.tenpo.filters;
 
+import com.example.tenpo.security.JWTTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
