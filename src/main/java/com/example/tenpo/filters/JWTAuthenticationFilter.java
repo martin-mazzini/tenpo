@@ -22,15 +22,7 @@ import static com.example.tenpo.security.JWTTokenUtils.HEADER_STRING;
 
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
-
-	private Long tokenValidty = 18000L;
-	private String signingKey = "hfgry463hf746hf573ydh475fhy5739";
-	private String Bearer = "Bearer";
-	private String header = "Authorization";
-
-
-
-	@Resource(name = "usersServiceImpl") //...hay más de un bean del tipo.
+	@Resource(name = "usersServiceImpl")
 	private UserDetailsService userDetailsService;
 
 	@Autowired
@@ -40,7 +32,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 
 
-		Optional<String> tokenOpt = Optional.ofNullable(httpServletRequest.getHeader(HEADER_STRING));
+		Optional<String> tokenOpt = jwtTokenUtil.getToken(httpServletRequest);
 		Optional<String> usernameOpt = tokenOpt.map(token -> jwtTokenUtil.parseUsername(token));
 
 		if (usernameOpt.isPresent() && isNotAuthenticated()) {
