@@ -20,9 +20,9 @@ Para probar los endpoints:
 
  1. Crear un user (primer request en la collection)
  2. Realizar el login (segundo request en la collection)
- 3. Copiar el token del response del paso 2 en el authorization header de los otros endpoints (que requieren autenticación)
+ 3. Copiar el token del response del paso 2 en el header Authorization de los otros endpoints (que requieren autenticación)
 
-La UI también permite autenticarse, arriba a la derecha hay un botón "Authorize" donde pegar el token.
+La UI también permite autenticarse, arriba a la derecha hay un botón "Authorize" donde pegar el token (con prefijo Bearer incluido).
 
 ## Stack de desarrollo
 
