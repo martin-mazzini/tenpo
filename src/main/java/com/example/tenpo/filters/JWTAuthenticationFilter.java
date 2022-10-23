@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.example.tenpo.security.JWTTokenUtils.HEADER_STRING;
+
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
 
@@ -26,11 +28,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 	private String Bearer = "Bearer";
 	private String header = "Authorization";
 
-	@Value("${jwt.header.string}")
-	public String HEADER_STRING;
 
-	@Value("${jwt.token.prefix}")
-	public String TOKEN_PREFIX;
 
 	@Resource(name = "usersServiceImpl") //...hay más de un bean del tipo.
 	private UserDetailsService userDetailsService;
@@ -45,9 +43,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 		Optional<String> tokenOpt = Optional.ofNullable(httpServletRequest.getHeader(HEADER_STRING));
 		Optional<String> usernameOpt = tokenOpt.map(token -> jwtTokenUtil.parseUsername(token));
 
-
 		if (usernameOpt.isPresent() && isNotAuthenticated()) {
-
 			String username = usernameOpt.get();
 			String authToken = tokenOpt.get();
 			UserDetails userDetails = userDetailsService.loadUserByUsername(username);

@@ -23,17 +23,12 @@ import java.util.stream.Collectors;
 @Component
 public class JWTTokenUtils implements Serializable {
 
-
-	@Value("${jwt.header.string}")
-	public String HEADER_STRING;
-
-    @Value("${jwt.token.validity}")
-    public long TOKEN_VALIDITY;
+	public static final String HEADER_STRING = "Authorization";
+	protected static final Long TOKEN_VALIDITY = 18000L;
+	protected static final String BEARER = "Bearer";
 
     @Value("${jwt.signing.key}")
     public String SIGNING_KEY;
-
-
 
 
 	public String getUsernameFromToken(String token) {
@@ -55,8 +50,6 @@ public class JWTTokenUtils implements Serializable {
                 .getBody();
     }
 
-
-
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
@@ -64,7 +57,6 @@ public class JWTTokenUtils implements Serializable {
 
     //genera el jwt token a partir de la autenticacion
     public String generateToken(Authentication authentication) {
-
         		return Jwts.builder()
                 .setSubject(authentication.getName())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -73,7 +65,6 @@ public class JWTTokenUtils implements Serializable {
                 .compact();
     }
 
-    //chequea que un token sea valido
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		final String username = getUsernameFromToken(token);
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
@@ -81,19 +72,8 @@ public class JWTTokenUtils implements Serializable {
 
 
     public UsernamePasswordAuthenticationToken getAuthenticationToken(String token, UserDetails userDetails) {
-
-        final JwtParser jwtParser = Jwts.parser().setSigningKey(SIGNING_KEY);
-
-        final Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
-
-        final Claims claims = claimsJws.getBody();
-
-		final Collection<? extends GrantedAuthority> grantedAuthorities = new ArrayList<>();
-
-        return new UsernamePasswordAuthenticationToken(userDetails, "", grantedAuthorities);
+        return new UsernamePasswordAuthenticationToken(userDetails, "", new ArrayList<>());
     }
-
-
 
 	public String parseUsername(String authToken) {
 		String username = null;
@@ -109,14 +89,12 @@ public class JWTTokenUtils implements Serializable {
 		return username;
 	}
 
-
-
 	public User getPrincipal() {
 		User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return principal;
 	}
 
-	//el username es el mail
+
 	public String getUserEmail() {
 		return getPrincipal().getUsername();
 	}

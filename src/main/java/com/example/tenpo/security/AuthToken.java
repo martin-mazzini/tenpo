@@ -1,23 +1,15 @@
 package com.example.tenpo.security;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class AuthToken {
 
     private String token;
 
-    public AuthToken(){
-
-    }
-
-    public AuthToken(String token){
-        this.token = token;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 
 }

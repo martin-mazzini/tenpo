@@ -23,6 +23,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurity extends WebSecurityConfigurerAdapter  {
 
 
+	public static final String LOGIN_ENDPOINT = "/api/v1/users/login";
+	public static final String REGISTER_ENDPOINT = "/api/v1/users";
 	private Environment environment;
 	private UsersService usersService;
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -31,8 +33,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter  {
 
 	@Autowired
 	public WebSecurity(Environment environment, UsersService usersService, BCryptPasswordEncoder bCryptPasswordEncoder
-			, UnauthorizedEntryPoint unauthorizedEntryPoint)
-	{
+			, UnauthorizedEntryPoint unauthorizedEntryPoint) {
 		this.environment = environment;
 		this.usersService = usersService;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -48,8 +49,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter  {
 				.authorizeRequests()
 				.antMatchers("/ping","/v2/api-docs","/swagger-ui/**","/swagger-resources/**","/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**","/swagger-resources/configuration/ui","/swagger-ui.html")
 				.permitAll()
-				.antMatchers("/api/v1/users/login").permitAll()
-				.antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+				.antMatchers(LOGIN_ENDPOINT).permitAll()
+				.antMatchers(HttpMethod.POST, REGISTER_ENDPOINT).permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint).and()
