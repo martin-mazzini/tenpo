@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "cd002ddf-b04e-4d5d-b442-c33cee8e8fbf",
+		"_postman_id": "92e14147-8ee0-463b-aa0f-952b26815306",
 		"name": "Tenpo challenge",
 		"description": "Api del challenge de Tenpo\n\nContact Support:\n Name: Martín Mazzini\n Email: martinmazzinigeo@gmail.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -1577,7 +1577,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/requestlogs?page=-0&size=49",
+							"raw": "http://localhost:8080/api/v1/requestlogs?page=-0&size=100",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1596,7 +1596,7 @@
 								},
 								{
 									"key": "size",
-									"value": "49",
+									"value": "100",
 									"description": "size"
 								}
 							]
