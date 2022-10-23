@@ -42,10 +42,6 @@ public class SameThreadExecutorService extends ThreadPoolExecutor {
         final SameThreadExecutorService instance
                 = new SameThreadExecutorService();
 
-        // The executor has one worker thread. Give it a Runnable that waits
-        // until the executor service is shut down.
-        // All other submitted tasks will use the RejectedExecutionHandler
-        // which runs tasks using the  caller's thread.
         instance.submit(new Runnable() {
             @Override public void run() {
                 boolean interrupted = false;
