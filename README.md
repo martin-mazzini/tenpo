@@ -62,9 +62,10 @@ Se implementó la alternativa número 1. El siguiente diagrama resume la lógica
 
 Otras consideraciones que vale la pena mencionar.
 
- - **Cache utilizada:** Cómo solo nos importa el último valor obtenido, no hizo falta utilizar ninguna librería externa (tipo Guava / Caffeine)
- - **Cache externa:** se podría utilizar una cache externa (Redis o memcached por ejemplo) para guardar el porcentaje, dependiendo de los requerimientos. Existen diferencias en cuanto a latencia, costo de mantenimiento, consistencia de los datos y problemas de cold-start con respecto a utilizar una **cache local**.
+ - **Cache utilizada:** Cómo solo nos importa el último valor obtenido, no hizo falta utilizar ninguna librería externa (tipo Guava / Caffeine). Simplemente se almacenan el porcentaje y la key prestando (de modo thread safe)
+ - **Cache externa:** se podría utilizar una cache externa (Redis o memcached por ejemplo) para guardar el porcentaje, dependiendo de los requerimientos reales (en cuanto a latencia, costo de mantenimiento, consistencia de los datos)
  - **Retries:** para implementar la lógica de retry se utilizó la librería **resilience4j**. Adicionalmente se podría configurar un **circuit-breaker** si fuera necesario.
+ - **Validad del valor cacheado:** cómo el valor cacheado no tiene ningún tipo de expiración o TTL, se podría chequear que su antigüedad no supere cierto umbral, luego de lo cuál se lo consideraría inválido y se devolvería un error.
   
 ## Validación y errores
  - Se utilizaron las anotaciones de **Bean Validation** (JSR 380) para validar el formato del payload de los requests (ver directorio controller.request)
@@ -77,6 +78,8 @@ Se incluyeron varios tests unitarios y otros de integración. Algunas menciones 
  - En **UsersControllerTest** se incluyeron tests para el signup, login, y chequear que la autenticación funcione correctamente.
  - **PercentageRepositoryImplTest** incluye varios tests unitarios para comprobar que la obtención del porcentaje se comporta de acuerdo a los requerimientos (ir cada media hora al servicio, tomar el valor anterior si falla, retries hasta 3 veces, etc)
  - Se incluyeron algunos test parametrizados para testear lógica sencilla (ej: **TimeUtilsTest**)
+
+Gracias por leer!
  
 
   
