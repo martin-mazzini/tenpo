@@ -3,7 +3,6 @@ package com.example.tenpo.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -11,9 +10,11 @@ import java.util.concurrent.Executors;
 public class ThreadPool {
 
 
-    @Bean()
+    public static final int N_THREADS = 10;
+
+    @Bean
     public ExecutorService logRequestsExecutor() {
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        ExecutorService executorService = Executors.newFixedThreadPool(N_THREADS);
         return executorService;
     }
 }

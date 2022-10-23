@@ -30,53 +30,46 @@ import javax.validation.Valid;
 public class UsersController {
 
 
-	private UsersService usersService;
-	private AuthenticationManager authenticationManager;
-	private JWTTokenUtils jwTokenUtils;
-	private ModelMapper modelMapper;
+    private UsersService usersService;
+    private AuthenticationManager authenticationManager;
+    private JWTTokenUtils jwTokenUtils;
+    private ModelMapper modelMapper;
 
-	public UsersController(UsersService usersService, AuthenticationManager authenticationManager,
+    public UsersController(UsersService usersService, AuthenticationManager authenticationManager,
                            JWTTokenUtils jwTokenUtils, ModelMapper modelMapper) {
-		this.usersService = usersService;
-		this.authenticationManager = authenticationManager;
-		this.jwTokenUtils = jwTokenUtils;
-		this.modelMapper = modelMapper;
-	}
+        this.usersService = usersService;
+        this.authenticationManager = authenticationManager;
+        this.jwTokenUtils = jwTokenUtils;
+        this.modelMapper = modelMapper;
+    }
 
-	@PostMapping
-	@ApiOperation(value="Create a new user", response = CreateUserResponse.class)
-	@ApiResponses(value = {@ApiResponse(code = 409, message = "Email is already in use")})
-	public ResponseEntity<CreateUserResponse> register(@Valid @RequestBody CreateUserRequest userDetails)
-	{
+    @PostMapping
+    @ApiOperation(value = "Create a new user", response = CreateUserResponse.class)
+    @ApiResponses(value = {@ApiResponse(code = 409, message = "Email is already in use")})
+    public ResponseEntity<CreateUserResponse> register(@Valid @RequestBody CreateUserRequest userDetails) {
 
-		UserDTO userDto = modelMapper.map(userDetails, UserDTO.class);
-		UserDTO createdUser = usersService.createUser(userDto);
-		CreateUserResponse returnValue = modelMapper.map(createdUser, CreateUserResponse.class);
-		return ResponseEntity.status(HttpStatus.OK).body(returnValue);
-	}
-
-
-	@PostMapping("/login")
-	@ApiOperation(value="Login", response = AuthToken.class)
-	@ApiResponses(value = {@ApiResponse(code = 404, message = "User or password don´t exist")})
-	public ResponseEntity<AuthToken> login(@Valid @RequestBody LoginRequest loginUser) {
-
-		final Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-						loginUser.getEmail(),
-						loginUser.getPassword()
-				)
-		);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		final String token = jwTokenUtils.generateToken(authentication);
-		return ResponseEntity.ok(new AuthToken(token));
-	}
+        UserDTO userDto = modelMapper.map(userDetails, UserDTO.class);
+        UserDTO createdUser = usersService.createUser(userDto);
+        CreateUserResponse returnValue = modelMapper.map(createdUser, CreateUserResponse.class);
+        return ResponseEntity.status(HttpStatus.OK).body(returnValue);
+    }
 
 
+    @PostMapping("/login")
+    @ApiOperation(value = "Login", response = AuthToken.class)
+    @ApiResponses(value = {@ApiResponse(code = 404, message = "User or password don´t exist")})
+    public ResponseEntity<AuthToken> login(@Valid @RequestBody LoginRequest loginUser) {
 
-
-
-
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginUser.getEmail(),
+                        loginUser.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        final String token = jwTokenUtils.generateToken(authentication);
+        return ResponseEntity.ok(new AuthToken(token));
+    }
 
 
 }

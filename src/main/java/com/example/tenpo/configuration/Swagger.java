@@ -31,8 +31,8 @@ public class Swagger {
             .description("Unauthorized user")
             .build();
 
-    public static final Response ERROR_404 = new ResponseBuilder().code("404")
-            .description("Resource not found")
+    public static final Response ERROR_400 = new ResponseBuilder().code("400")
+            .description("Bad request")
             .build();
 
     @Bean
@@ -51,12 +51,10 @@ public class Swagger {
     }
 
     private List<Response> globalGetMessages() {
-        return List.of(ERROR_401,ERROR_403,ERROR_404);
+        return List.of(ERROR_401,ERROR_403, ERROR_400);
     }
 
-    private List<Response> globalPostMessages() {
-        return List.of(ERROR_401,ERROR_403,ERROR_404);
-    }
+    private List<Response> globalPostMessages() {return List.of(ERROR_401,ERROR_403, ERROR_400);}
 
 
     private ApiInfo apiDetails() {
