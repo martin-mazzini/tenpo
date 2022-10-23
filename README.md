@@ -10,22 +10,19 @@ Hola! Soy Martín, gracias por revisar este proyecto. Incluí un readme para ayu
  1. Clonar el repositorio
  2. Ejecutar el comando `docker-compose up`. 
  3. Para probar la API se recomienda:
-	 1. Utilizar la collection de Postman (en el root del repositorio) para probar los endpoints. Ver la sección que sigue para entender como autenticarse.
+	 1. Utilizar la collection de Postman (en el directorio raíz de este repositorio) para probar los endpoints. Ver la sección que sigue para autenticación.
 	 2. Navegar a **[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)** para explorar la documentación de la API. La UI también permite interactuar con la API.
 	 
 
 ## ¿Cómo loguearse?
 
-Para probar los endpoints, primero hay que:
+Para probar los endpoints:
 
- 1. Crear un user
- 2. Realizar el login
+ 1. Crear un user (primer request en la collection)
+ 2. Realizar el login (segundo request en la collection)
  3. Copiar el token del response del paso 2 en el authorization header de los otros endpoints (que requieren autenticación)
 
-Para los pasos 1 y 2 los datos de un user se encuentran pre-cargado (tanto en la UI como en la colección de Postman). Para copiar el token:
-
- 1. Si es con Postman, pegarlo directamente en Authorization.
- 2. Si se utiliza la UI, navegar al botón "Authorize" y pegar el token ahí. 
+La UI también permite autenticarse, arriba a la derecha hay un botón "Authorize" donde pegar el token.
 
 ## Stack de desarrollo
 
@@ -42,7 +39,7 @@ La API está documentada utilizando la librería Springfox Swagger, incluyendo l
  - http://localhost:8080/v2/api-docs para documentación en formato JSON.    
   
 ## Guardado del historial de requests
- - Este feature está implementado en la clase **AsyncRequestProcessorFilter**, extendiendo de **OncePerRequestFilter**. Este filter pasa los datos del request y el response a un **Thread Pool** que luego se encarga del guardado a la base de datos (para evitar sumar tiempo extra al request).
+ - Este feature está implementado en la clase **AsyncRequestProcessorFilter**, extendiendo de **OncePerRequestFilter**. Este filter pasa los datos del request y el response a un **Thread Pool** que luego se encarga del guardado a la base de datos (para evitar que el llamado a la base sume tiempo extra al request).
  - En una arquitectura de microservicios real probablemente convendría
    externalizar y centralizar esta responsabilidad en otro componente
    (por ejemplo en un API Gateway, o utilizando un sidecar container +
@@ -51,11 +48,11 @@ La API está documentada utilizando la librería Springfox Swagger, incluyendo l
   
 
 ## SumService
-El servicio externo de porcentajes se mockeo en la clase **PercentageServiceMock** (devuelve un valor random entre 10 y 12).  Para obtener el porcentaje, de acuerdo a los requerimientos, se consideraron dos alternativas:
- 1. Cachear el último porcentaje localmente, con una **key que dependa del momento** en que se procesa el request, de forma que la key varie cada media hora. De esta manera nos aseguramos de consultar al servicio externo una sola vez por cada media hora, asumiendo un request exitoso.
- 2. Utilizar un cron (@Scheduled) que corra cada media hora, que consulte al servicio externo y guarde el resultado obtenido localmente. Luego el servicio interesado sólo debe consultar este campo.
+El servicio externo de porcentajes se mockeo en la clase **PercentageServiceMock** (devuelve un valor random entre 10 y 12).  Para obtener el porcentaje, de acuerdo a los requerimientos, se consideraron dos alternativas, ambas cacheando el valor de forma local:
+ 1. Lazy loading: ir a buscar el valor del porcentaje a la cache, y si no está, recién ahi ir al servicio externo. Si cacheamos el valor con una **key que dependa del momento** en que se procesa el request, de forma que la key cambie cada media hora, nos aseguraríamos de consultar al servicio externo una sola vez por cada media hora, asumiendo un request exitoso.
+ 2. Eager loading: Utilizar un cron (@Scheduled) que corra cada media hora, consulte al servicio externo y guarde el resultado obtenido. Luego el servicio interesado sólo debe consultar este valor, sin usar ninguna key.
  
-Se implementó la alternativa número 1. El siguiente diagrama resume la lógica con más detalle.
+Se implementó la alternativa número 1. El siguiente diagrama resume la lógica:
 
 <img width="930" alt="tenpo" src="https://user-images.githubusercontent.com/25701657/197373558-7df5fafc-199d-4ba2-b2ed-fdcd9023f578.png">
 
@@ -63,9 +60,9 @@ Se implementó la alternativa número 1. El siguiente diagrama resume la lógica
 Otras consideraciones que vale la pena mencionar.
 
  - **Cache utilizada:** Cómo solo nos importa el último valor obtenido, no hizo falta utilizar ninguna librería externa (tipo Guava / Caffeine). Simplemente se almacenan el porcentaje y la key (de modo thread safe)
- - **Cache externa:** se podría utilizar una cache externa (Redis o memcached por ejemplo) para guardar el porcentaje, dependiendo de los requerimientos reales (en cuanto a latencia, costo de mantenimiento, consistencia de los datos)
+ - **Cache externa:** se podría utilizar una cache externa (Redis o memcached por ejemplo) para guardar el porcentaje, dependiendo de los requerimientos reales (en cuanto a latencia, costo de mantenimiento, y si necesario un valor consistente del % entre las distintas instancias de la app)
  - **Retries:** para implementar la lógica de retry se utilizó la librería **resilience4j**. Adicionalmente se podría configurar un **circuit-breaker** si fuera necesario.
- - **Validez del valor cacheado:** cómo el valor cacheado no tiene ningún tipo de expiración o TTL, se podría chequear que su antigüedad no supere cierto umbral, luego de lo cuál se lo consideraría inválido y se devolvería un error.
+ - **Validez del valor cacheado:** cómo el valor cacheado no tiene ningún tipo de expiración o TTL, se podría chequear que su antigüedad no supere cierto umbral, luego de lo cuál se lo podría invalidar y devolver un error.
   
 ## Validación y errores
  - Se utilizaron las anotaciones de **Bean Validation** (JSR 380) para validar el formato del payload de los requests (ver directorio controller.request)
@@ -80,7 +77,6 @@ Se incluyeron varios tests unitarios y otros de integración. Algunas menciones 
  - Se incluyeron algunos test parametrizados para testear lógica sencilla (ej: **TimeUtilsTest**)
 
 
-### Gracias por leer!
- 
+
 
   
