@@ -7,7 +7,8 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-@Table(name="users")
+@Table(name="users",
+		uniqueConstraints = { @UniqueConstraint(name = "email_unique", columnNames = "email")})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,9 +26,10 @@ public class UserEntity implements Serializable {
 	
 	@Column(nullable=false, length=50)
 	private String lastName;
-	
+
+	/** Usuarios identificados por mail**/
 	@Column(nullable=false, length=120, unique=true)
-	private String email; /** EL email es el atributo que identifica univocamente a un usuario**/
+	private String email;
 	
 	@Column(nullable=false, unique=true)
 	private String userId;
