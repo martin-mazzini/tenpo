@@ -9,9 +9,10 @@ Hola! Soy Martín, gracias por revisar este proyecto. Incluí un readme para ayu
 
  1. Clonar el repositorio
  2. Ejecutar el comando `docker-compose up`. 
- 3. Para probar la API hay dos opciones:
-	 1. Navegar a **[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)** y utilizar la UI interactiva.
-	 2. Utilizar el collection de Postman adjunto.
+ 3. Para probar la API se recomienda:
+	 1. Utilizar el collection de Postman (en el root del repositorio) para probar los endpoints. Ver la sección que sigue para entender como autenticarse.
+	 2. Navegar a **[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)** para explorar la documentación de la API. También se puede interactuar con la API mediante la UI.
+	 
 
 ## ¿Cómo loguearse?
 
@@ -21,10 +22,10 @@ Para probar los endpoints, primero hay que:
  2. Realizar el login
  3. Copiar el token en el authorization header a los otros endpoints (que requieren autenticación)
 
-Para los pasos 1 y 2 los datos de un user se encuentran pre-cargado (tanto en la UI como en la colección de Postman). Luego es necesario copiar el token del response a los otros endpoints. 
+Para los pasos 1 y 2 los datos de un user se encuentran pre-cargado (tanto en la UI como en la colección de Postman). Luego es necesario copiar el token del response del login a los otros endpoints. 
 
  1. Si se utiliza la UI, navegar al botón "Authorize" y pegar el token ahí. 
- 2. Si es con Postman, pegarlo directamente en el header.
+ 2. Si es con Postman, pegarlo directamente en Authorization.
 
 ## Stack de desarrollo
 
