@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "92e14147-8ee0-463b-aa0f-952b26815306",
+		"_postman_id": "56536d49-0cac-4ada-9902-8a716f330485",
 		"name": "Tenpo challenge",
 		"description": "Api del challenge de Tenpo\n\nContact Support:\n Name: Martín Mazzini\n Email: martinmazzinigeo@gmail.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -501,21 +501,11 @@
 					"name": "3-Sum two numbers",
 					"request": {
 						"auth": {
-							"type": "apikey",
-							"apikey": [
+							"type": "bearer",
+							"bearer": [
 								{
-									"key": "value",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJ0aW5tYXp6aW5pZ2VvQGdtYWlsLmNvbSIsImlhdCI6MTY2NjQ4NDA2NiwiZXhwIjoxNjY2NTAyMDY2fQ.W6dnS6_okgEMN-W_KLkskYjWQ7xEUvYTkVRPcVZ9X0g",
-									"type": "string"
-								},
-								{
-									"key": "key",
-									"value": "Authorization",
-									"type": "string"
-								},
-								{
-									"key": "in",
-									"value": "header",
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJ0aW5tYXp6aW5pZ2VvQGdtYWlsLmNvbSIsImlhdCI6MTY2NjU0MTY0MywiZXhwIjoxNjY2NTU5NjQzfQ.Hnd0YDMQiBjgwhKLsLJIIxN1JTc6PV8s1g5bvrALgWs",
 									"type": "string"
 								}
 							]
@@ -785,21 +775,11 @@
 					"name": "4-Get request logs",
 					"request": {
 						"auth": {
-							"type": "apikey",
-							"apikey": [
+							"type": "bearer",
+							"bearer": [
 								{
-									"key": "value",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJ0aW5tYXp6aW5pZ2VvQGdtYWlsLmNvbSIsImlhdCI6MTY2NjQ4NDA2NiwiZXhwIjoxNjY2NTAyMDY2fQ.W6dnS6_okgEMN-W_KLkskYjWQ7xEUvYTkVRPcVZ9X0g",
-									"type": "string"
-								},
-								{
-									"key": "key",
-									"value": "Authorization",
-									"type": "string"
-								},
-								{
-									"key": "in",
-									"value": "header",
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJ0aW5tYXp6aW5pZ2VvQGdtYWlsLmNvbSIsImlhdCI6MTY2NjU0MTY0MywiZXhwIjoxNjY2NTU5NjQzfQ.Hnd0YDMQiBjgwhKLsLJIIxN1JTc6PV8s1g5bvrALgWs",
 									"type": "string"
 								}
 							]
@@ -1550,21 +1530,11 @@
 					"name": "7-Get request invalid page size",
 					"request": {
 						"auth": {
-							"type": "apikey",
-							"apikey": [
+							"type": "bearer",
+							"bearer": [
 								{
-									"key": "value",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJ0aW5tYXp6aW5pZ2VvQGdtYWlsLmNvbSIsImlhdCI6MTY2NjQ4Njc5MCwiZXhwIjoxNjY2NTA0NzkwfQ.yAO65I-5V-tcx4uVX30uPjmR56Jp_fmtkKisopfkQgU",
-									"type": "string"
-								},
-								{
-									"key": "key",
-									"value": "Authorization",
-									"type": "string"
-								},
-								{
-									"key": "in",
-									"value": "header",
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJ0aW5tYXp6aW5pZ2VvQGdtYWlsLmNvbSIsImlhdCI6MTY2NjU0Mzc3MSwiZXhwIjoxNjY2NTYxNzcxfQ.dqtaLLoTWMWspEFOd1gSzzwInuFAIrKWfN-pbxmu2qw",
 									"type": "string"
 								}
 							]
