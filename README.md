@@ -51,7 +51,7 @@ La API está documentada utilizando la librería Springfox Swagger, incluyendo t
 
 ## SumService
 El servicio externo de porcentajes se mockeo en la clase **PercentageServiceMock** (devuelve un valor random entre 10 y 12).  Para obtener el porcentaje, de acuerdo a los requerimientos, se consideraron dos alternativas:
- 1. Cachear el último porcentaje localmente, con una **key que dependa del momento** en que se procesa el request, de forma que la key varie cada media hora. De esta manera nos aseguramos de consultar al servicio externo una sola vez por cada media hora (en caso de llamado exitoso).
+ 1. Cachear el último porcentaje localmente, con una **key que dependa del momento** en que se procesa el request, de forma que la key varie cada media hora. De esta manera nos aseguramos de consultar al servicio externo una sola vez por cada media hora, asumiendo un request exitoso.
  2. Utilizar un cron (@Scheduled) que corra cada media hora, que consulte al servicio externo y guarde el resultado obtenido localmente. Luego el servicio interesado sólo debe consultar este campo.
  
 Se implementó la alternativa número 1. El siguiente diagrama resume la lógica con más detalle.
@@ -62,7 +62,7 @@ Se implementó la alternativa número 1. El siguiente diagrama resume la lógica
 Otras consideraciones que vale la pena mencionar.
 
  - **Cache utilizada:** Cómo solo nos importa el último valor obtenido, no hizo falta utilizar ninguna librería externa (tipo Guava / Caffeine)
- - **Cache externa:** se podría utilizar una cache externa (Redis o memcached por ejemplo) para guardar el porcentaje, dependiendo de los requerimientos. Hay diferencias en cuanto a latencia, costo de mantenimiento, consistencia de los datos y problemas de cold-start con respecto a utilizar una **cache local**.
+ - **Cache externa:** se podría utilizar una cache externa (Redis o memcached por ejemplo) para guardar el porcentaje, dependiendo de los requerimientos. Existen diferencias en cuanto a latencia, costo de mantenimiento, consistencia de los datos y problemas de cold-start con respecto a utilizar una **cache local**.
  - **Retries:** para implementar la lógica de retry se utilizó la librería **resilience4j**. Adicionalmente se podría configurar un **circuit-breaker** si fuera necesario.
   
 ## Validación y errores
